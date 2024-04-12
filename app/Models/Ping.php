@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
 
 class Ping extends Model
@@ -27,6 +28,11 @@ class Ping extends Model
         'ping',
         'last_activity',
     ];
+    protected $guarded = [];
 
+    public function addresses(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, );
+    }
 
 }

@@ -197,7 +197,7 @@ Array.prototype.slice.call(forms).forEach(function (form) {
             if (
                 customerNameField.value !== "" &&
                 emailField.value !== "" &&
-                dateField.value !== "" &&
+                dateField.value !== ""
 
             ) {
                 customerList.add({
@@ -225,7 +225,7 @@ Array.prototype.slice.call(forms).forEach(function (form) {
             } else if (
                 customerNameField.value !== "" &&
                 emailField.value !== "" &&
-                dateField.value !== "" &&
+                dateField.value !== ""
 
             ) {
                 var editValues = customerList.get({

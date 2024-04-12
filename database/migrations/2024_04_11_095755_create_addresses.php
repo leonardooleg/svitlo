@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->index();
             $table->string('name');
             $table->string('ip_address', 45);
-            $table->string('public', 45)->nullable();
+            $table->integer('public')->default(0);
+            $table->string('link', 45)->nullable();
         });
 
         Schema::create('pings', function (Blueprint $table) {

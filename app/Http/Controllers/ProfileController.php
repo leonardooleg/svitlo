@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use App\Models\Address;
+
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -16,10 +20,34 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request ): View
     {
+        $user = auth()->user();
+
+        $addresses = $user->addresses;
+
+        $addressesWithPings = [];
+
+        foreach ($addresses as $address) {
+            $ping = $address->pings()->latest('last_activity')->first()->toArray();
+            $minutesAgo = ceil((time() - $ping['last_activity']) / 60);
+            if ($minutesAgo > 4) {
+                $online = false;
+            }else{
+                $online = true;
+            }
+            $addressesWithPings[] = [
+                'address' => $address->toArray(),
+                'ping' => $ping,
+                'online' => $online,
+                'minutesAgo' => $minutesAgo,
+            ];
+        }
+
+
         return view('profile.profile', [
             'user' => $request->user(),
+            'addresses' => $addressesWithPings,
         ]);
     }
 

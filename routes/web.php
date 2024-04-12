@@ -22,10 +22,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile/theme', [ProfileController::class, 'theme_update'])->name('profile.theme');
 
-    Route::get('/addresses', [AddressesController::class, 'edit'])->name('addresses.edit');
-    Route::patch('/addresses', [AddressesController::class, 'update'])->name('addresses.update');
-    Route::delete('/addresses', [AddressesController::class, 'destroy'])->name('addresses.destroy');
-    Route::post('/addresses/theme', [AddressesController::class, 'theme_update'])->name('addresses.theme');
+    Route::post('/addresses/update/{id}', [AddressesController::class, 'update']);
+
+
 });
 
 

@@ -56,7 +56,7 @@
     </div>
 
 
-    <div class="card">
+    <div class="card" id="adresses-index">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
@@ -112,45 +112,60 @@
                                         </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
-                                        <tr id="parentDiv">
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" name="chk_child">
-                                                    <label class="form-check-label"></label>
-                                                </div>
-                                            </td>
-                                            <td class="id" style="display:none;"><a href="apps-customers-overview"
-                                                                                    class="fw-medium link-primary">#TB01</a></td>
-                                            <td class="name">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <a href="#showModal" class="text-reset" data-bs-toggle="modal">
-                                                        <h6 class="mb-0 flex-grow-1 text-reset contactname">Mary Damron</h6>
-                                                    </a>
-                                                </div>
-                                            </td>
+                                        @if (isset($addresses))
+                                            @foreach ($addresses as $address)
+                                                <tr id="parentDiv" data-address-id="{{ $address['address']['id'] }}">
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="chk_child">
+                                                            <label class="form-check-label"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td class="id" style="display:none;">
+                                                        <a href="apps-customers-overview" class="fw-medium link-primary">#TB01</a></td>
+                                                    <td class="name">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <a href="#showModal" class="text-reset" data-bs-toggle="modal">
+                                                                <h6 class="mb-0 flex-grow-1 text-reset contactname"> {{ $address['address']['name'] }}</h6>
+                                                            </a>
+                                                        </div>
+                                                    </td>
 
-                                            <td class="membership"><span class="badge bg-warning">Онлайн</span></td>
-                                            <td class="date">5хв. назад</td>
-                                            <td class="membership"><span class="badge bg-info">Публічна</span></td>
-                                            <td>
-                                               {{-- <a class="d-flex align-items-center gap-2 dropdown-item  edit-item-btn" href="#showModal"
-                                                   data-bs-toggle="modal">Редагувати</a>--}}
-                                                <div class="dropdown">
-                                                    <a class="btn btn-icon btn-subtle-secondary btn-sm dropdown-btn"
-                                                       href="#" data-bs-toggle="dropdown" aria-haspopup="true"
-                                                       aria-expanded="false">
-                                                       ...
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                    <td class="membership">
+                                                        @if ($address['online'] === true)
+                                                            <span class="badge bg-warning">Онлайн</span>
+                                                        @else
+                                                            <span class="badge bg-danger">Офлайн </span>
+                                                        @endif
+                                                    <td class="date">{{ $address['minutesAgo'] }} хв. назад</td>
+                                                    <td class="membership address_public">
+                                                            @if ($address['address']['public'] === 1)
+                                                                <span class="badge bg-success address_public_status">Публічна</span>
+                                                                <span class="address_link d-none" >{{$address['address']['link']}}</span>
+                                                            @else
+                                                                <span class="badge bg-info address_public_status">Приватна </span>
+                                                            @endif
+                                                    </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <a class="btn btn-icon btn-subtle-secondary btn-sm dropdown-btn"
+                                                               href="#" data-bs-toggle="dropdown" aria-haspopup="true"
+                                                               aria-expanded="false">
+                                                                ...
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-end">
 
-                                                        <a class="dropdown-item edit-item-btn" href="#editModal"
-                                                           data-bs-toggle="modal">Змінити</a>
-                                                        <a class="dropdown-item remove-item-btn" href="#deleteRecordModal"
-                                                           data-bs-toggle="modal">Видалити</a>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                                <a class="dropdown-item edit-item-btn" href="#editModal"
+                                                                   data-bs-toggle="modal">Змінити</a>
+                                                                <a class="dropdown-item remove-item-btn" href="#deleteRecordModal"
+                                                                   data-bs-toggle="modal">Видалити</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -323,7 +338,7 @@
             <div class="modal-content border-0">
                 <div class="modal-header bg-soft-info p-3">
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"
                             id="close-modal"></button>
                 </div>
                 <form class="tablelist-form" novalidate autocomplete="off">
@@ -344,8 +359,8 @@
                                     <label for="membership-field" class="form-label">Доступ</label>
                                     <select class="form-control" name="membership-field" id="membership-field"
                                             required />
-                                    <option value="Basic">Публічна</option>
-                                    <option value="Sliver">Приватна</option>
+                                    <option value="true">Публічна</option>
+                                    <option value="false">Приватна</option>
 
                                     </select>
                                 </div>
@@ -359,7 +374,6 @@
                         <div class="hstack gap-2 justify-content-end">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-success" id="add-btn">Add Contact</button>
-                            <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
                         </div>
                     </div>
                 </form>
@@ -374,19 +388,19 @@
             <div class="modal-content border-0">
                 <div class="modal-header bg-soft-info p-3">
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"
                             id="close-modal"></button>
                 </div>
                 <form class="tablelist-form" novalidate autocomplete="off">
                     <div class="modal-body">
                         <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
-                        <input type="hidden" id="id-field">
+                        <input type="hidden" id="id-field" name="id">
                         <div class="row g-3">
                             <div class="col-lg-12">
 
                                 <div>
                                     <label for="customername-field" class="form-label">Name</label>
-                                    <input type="text" id="customername-field" class="form-control"
+                                    <input type="text" id="customername-field" name="name" class="form-control"
                                            placeholder="Enter name" required />
                                 </div>
                             </div>
@@ -396,8 +410,8 @@
                                     <label for="membership-field" class="form-label">Доступ</label>
                                     <select class="form-control" name="membership-field" id="membership-field"
                                             required />
-                                    <option value="Basic">Публічна</option>
-                                    <option value="Sliver">Приватна</option>
+                                    <option type="number" value="1">Публічна</option>
+                                    <option type="number" value="0">Приватна</option>
 
                                     </select>
                                 </div>
@@ -405,7 +419,7 @@
                             <div class="col-lg-12">
                                 <div>
                                     <label for="email_id-field" class="form-label">Публічне посилання</label>
-                                    <input type="text" id="link_id-field" class="form-control"
+                                    <input type="text" id="link_id-field" name="link" class="form-control"
                                            placeholder="ваш лінк"  />
                                 </div>
                             </div>
@@ -415,8 +429,8 @@
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="edit-btn">Update</button>
+                            <button type="button" class="btn btn-light close-modal" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success" id="update_address">Update</button>
                         </div>
                     </div>
                 </form>
@@ -431,7 +445,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" id="deleteRecord-close" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close close-modal" id="deleteRecord-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-md-5">
@@ -461,17 +475,17 @@
     <!-- sweetalert2 js -->
     <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <!--list js-->
-    <script src="{{ URL::asset('build/libs/list.js/list.min.js') }}"></script>
+
     <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 
     <!-- password-create init -->
     <script src="{{ URL::asset('build/js/pages/passowrd-create.init.js') }}"></script>
 
     <!-- customer -->
-    <script src="{{ URL::asset('build/js/pages/customer-list.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/addresses-list.init.js') }}"></script>
 
     <!--profile init js-->
-    <script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>
+    {{--<script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>--}}
 
     <!-- App js -->
     <script src="{{ URL::asset('build/js/app.js') }}"></script>

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Addresses;
+use App\Models\Address;
 use App\Models\Ping;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,10 +21,12 @@ class DatabaseSeeder extends Seeder
             'name' => 'LeonardoOleg',
             'email' => 'leonardooleg2@gmail.com',
         ]);
-        Addresses::create([
-            'user_id' => 4,
+        Address::create([
+            'user_id' => 1,
             'name' => 'Квартира',
             'ip_address' => '192.168.1.1',
+            'public' => '1',
+            'link' => 'jhsdAHDI9hasuh',
         ]);
 
         Ping::create([
