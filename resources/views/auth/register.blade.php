@@ -62,19 +62,19 @@
                                 <div class="card mb-0 border-0 shadow-none mb-0">
                                     <div class="card-body p-sm-5 m-lg-4">
                                         <div class="text-center mt-2">
-                                            <h5 class="fs-3xl">Create your free account</h5>
-                                            <p class="text-muted">Get your free Judia account now</p>
+                                            <h5 class="fs-3xl">Створити акаунт</h5>
+                                            <p class="text-muted">Зареєструватись на сайті для моніторингу світла</p>
                                         </div>
                                         <div class="p-2 mt-5">
                                             <form method="POST" action="{{ route('register') }}" class="needs-validation" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label for="name" class="form-label">Name <span
+                                                    <label for="name" class="form-label">Нікнейм <span
                                                             class="text-danger">*</span></label>
                                                     <input type="text"
                                                         class="form-control @error('name') is-invalid @enderror"
                                                         value="{{ old('name') }}" name="name" id="name"
-                                                        placeholder="Enter your name" required>
+                                                        placeholder="Введіть свій нікнейм" required>
                                                     @error('name')
                                                         <span class="invalid-feedback text-start" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -87,7 +87,7 @@
                                                     <input type="email"
                                                         class="form-control @error('email') is-invalid @enderror"
                                                         name="email" value="{{ old('email') }}" id="useremail"
-                                                        placeholder="Enter email address" required>
+                                                        placeholder="Введіть email адрес" required>
                                                     @error('email')
                                                         <span class="invalid-feedback text-start" role="alert">
                                                             <strong>{{ $message }}</strong>
@@ -96,12 +96,12 @@
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="password-input">Password <span
+                                                    <label class="form-label" for="password-input">Пароль <span
                                                             class="text-danger">*</span></label>
                                                     <div class="position-relative auth-pass-inputgroup">
                                                         <input type="password"
                                                             class="form-control password-input pe-5 @error('password') is-invalid @enderror"
-                                                            name="password" placeholder="Enter password" id="password-input"
+                                                            name="password" placeholder="Введіть свій пароль" id="password-input"
                                                             required>
                                                         <button
                                                             class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
@@ -116,13 +116,13 @@
                                                 </div>
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="confirm-password-input">Confirm Password
+                                                    <label class="form-label" for="confirm-password-input">Повторно пароль
                                                         <span class="text-danger">*</span></label>
                                                     <div class="position-relative auth-pass-inputgroup">
                                                         <input type="password"
                                                             class="form-control password-input pe-5 @error('password') is-invalid @enderror"
                                                             name="password_confirmation"
-                                                            placeholder="Enter confirm password"
+                                                            placeholder="Підтвердіть свій пароль"
                                                             id="confirm-password-input" required>
                                                         <button
                                                             class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
@@ -134,27 +134,25 @@
 
 
                                                 <div class="mb-4">
-                                                    <p class="mb-0 fs-sm text-muted fst-italic">By registering you agree to
-                                                        the Judia <a href="pages-term-conditions"
-                                                            class="text-primary text-decoration-underline fst-normal fw-medium">Terms
-                                                            of Use</a></p>
+                                                    <p class="mb-0 fs-sm text-muted fst-italic">При реєстрації ви погоджуєтесь із  <a href="/faqs"
+                                                            class="text-primary text-decoration-underline fst-normal fw-medium">правилами користування сайтом</a></p>
                                                 </div>
 
                                                 <div id="password-contain" class="p-3 bg-light mb-2 rounded">
-                                                    <h5 class="fs-sm">Password must contain:</h5>
-                                                    <p id="pass-length" class="invalid fs-xs mb-2">Minimum <b>8 characters</b></p>
-                                                    <p id="pass-lower" class="invalid fs-xs mb-2">At <b>lowercase</b> letter (a-z)</p>
-                                                    <p id="pass-upper" class="invalid fs-xs mb-2">At least <b>uppercase</b> letter (A-Z)</p>
-                                                    <p id="pass-number" class="invalid fs-xs mb-0">A least <b>number</b> (0-9)</p>
+                                                    <h5 class="fs-sm">Пароль повинен містити:</h5>
+                                                    <p id="pass-length" class="invalid fs-xs mb-2">Мінімум <b>8 символів</b></p>
+                                                    <p id="pass-lower" class="invalid fs-xs mb-2">Мати <b>маленькі</b> літері (a-z)</p>
+                                                    <p id="pass-upper" class="invalid fs-xs mb-2">Мати <b>велику</b> літера (A-Z)</p>
+                                                    <p id="pass-number" class="invalid fs-xs mb-0">І містити <b>цифри</b> (0-9)</p>
                                                 </div>
 
                                                 <div class="mt-4">
-                                                    <button class="btn btn-primary w-100" type="submit">Sign Up</button>
+                                                    <button class="btn btn-primary w-100" type="submit">Зареєструватись</button>
                                                 </div>
 
                                                 <div class="mt-4 text-center">
                                                     <div class="signin-other-title position-relative">
-                                                        <h5 class="fs-sm mb-4 title text-muted">Create account with</h5>
+                                                        <h5 class="fs-sm mb-4 title text-muted">Увійти за допомогою</h5>
                                                     </div>
 
                                                     <div>
@@ -169,8 +167,8 @@
                                             </form>
                                         </div>
                                         <div class="mt-4 text-center">
-                                            <p class="mb-0">Already have an account ? <a href="{{ route('login') }}"
-                                                    class="fw-semibold text-primary text-decoration-underline"> Signin </a>
+                                            <p class="mb-0">у вас уже є акаунт ? <a href="{{ route('login') }}"
+                                                    class="fw-semibold text-primary text-decoration-underline"> Увійти </a>
                                             </p>
                                         </div>
                                     </div><!-- end card body -->

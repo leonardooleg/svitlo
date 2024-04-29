@@ -10,9 +10,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-
+use function Laravel\Prompts\form;
 
 
 class ProfileController extends Controller
@@ -29,17 +30,18 @@ class ProfileController extends Controller
         $addressesWithPings = [];
 
         foreach ($addresses as $address) {
-            $ping = $address->pings()->latest('last_activity')->first()->toArray();
-            $minutesAgo = ceil((time() - $ping['last_activity']) / 60);
-            if ($minutesAgo > 4) {
-                $online = false;
-            }else{
-                $online = true;
-            }
+            $ping = $address->pings()->latest('last_activity')->first();
+                if ($ping) {
+                    $ping= $ping->toArray();
+                    $minutesAgo = ceil((time() - $ping['last_activity']) / 60);
+                }else{
+                    $ping= false;
+                    $minutesAgo = false;
+                }
+
             $addressesWithPings[] = [
                 'address' => $address->toArray(),
                 'ping' => $ping,
-                'online' => $online,
                 'minutesAgo' => $minutesAgo,
             ];
         }
@@ -54,17 +56,59 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email'], // Use 'ip' rule for validation
+            'city' => ['string', 'max:50', 'nullable'],
+            'country' => ['string', 'max:50', 'nullable'],
 
+        ]);
+
+        $user = auth()->user();
+        $name = $request->input('name');
+        $email = $request->input('email');
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+        // Check for null values
+        $city = $request->input('city') === null ? null : $request->input('city');
+        $country = $request->input('country') === null ? null : $request->input('country');
 
-        $request->user()->save();
+        // Update address in database
+        $user->name = $name;
+        $user->email = $email;
+        $user->city = $city;
+        $user->country = $country;
+        $user->save();
+
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function update_password(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'new_password' => ['required', 'string', 'confirmed', 'min:8'],
+        ]);
+
+        $user = Auth::user();
+
+        if (Hash::check($request->input('current_password'), $user->password)) {
+            $user->update([
+                'password' => Hash::make($request->input('new_password')),
+            ]);
+
+            return response()->json([
+                'message' => 'Password updated successfully',
+            ]);
+        } else {
+            return response()->json([
+                'error' => 'Incorrect current password',
+            ], 401);
+        }
     }
 
     /**
@@ -95,6 +139,23 @@ class ProfileController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
+    public function user_form(Request $request)
+    {
+        $subject = "Feedback from " . $request->input('name');
+        $body = "Message: \n" . $request->input('message');
+        $recipient = "leonardooleg2@gmail.com";
+        $sent = mail($recipient, $subject, $body);
+        if ($sent) {
+            echo "Email sent successfully!";
+        } else {
+            echo "Error sending email.";
+        }
+
+
+
 
         return Redirect::to('/');
     }

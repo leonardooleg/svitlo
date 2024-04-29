@@ -27,12 +27,13 @@ class Ping extends Model
         'address_id',
         'ping',
         'last_activity',
+        'time_check',
     ];
     protected $guarded = [];
 
     public function addresses(): BelongsTo
     {
-        return $this->belongsTo(Address::class, );
+        return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 
 }

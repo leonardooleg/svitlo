@@ -40,7 +40,7 @@ var salesReportChart = "";
 var weeklyVisitorsChart = "";
 var sessionCountryChart = "";
 var salesFunnelChart = "";
-var teamPerformanceChart = ""; 
+var teamPerformanceChart = "";
 var chartBubbleSimpleChart = "";
 
 function loadCharts() {
@@ -237,63 +237,63 @@ function loadCharts() {
         var options = {
             series: [{
                 name: 'Jan',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Feb',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Mar',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Apr',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'May',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Jun',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Jul',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Aug',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })
             },
             {
                 name: 'Nov',
-                data: generateData(12, {
+                data: generateData(31, {
                     min: 0,
                     max: 90
                 })

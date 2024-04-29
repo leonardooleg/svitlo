@@ -114,7 +114,13 @@
                                         <tbody class="list form-check-all">
                                         @if (isset($addresses))
                                             @foreach ($addresses as $address)
-                                                <tr id="parentDiv" data-address-id="{{ $address['address']['id'] }}">
+                                                <tr id="parentDiv" data-address-id="{{ $address['address']['id'] }}"
+                                                @if ($address['address']['ip_address'])
+                                                        data-address-ip="{{ $address['address']['ip_address'] }}"
+                                                @elseif($address['address']['url_address'])
+                                                        data-address-url="{{ $address['address']['url_address'] }}"
+                                                @endif
+                                                >
                                                     <td>
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" name="chk_child">
@@ -132,12 +138,18 @@
                                                     </td>
 
                                                     <td class="membership">
-                                                        @if ($address['online'] === true)
+                                                        @if ($address['ping']['ping'] === 1)
                                                             <span class="badge bg-warning">Онлайн</span>
                                                         @else
                                                             <span class="badge bg-danger">Офлайн </span>
                                                         @endif
-                                                    <td class="date">{{ $address['minutesAgo'] }} хв. назад</td>
+                                                    <td class="date">
+                                                        @if ($address['minutesAgo'] >= 1)
+                                                            {{ $address['minutesAgo'] }} хв. назад
+                                                        @else
+                                                            не має даних
+                                                        @endif
+                                                    </td>
                                                     <td class="membership address_public">
                                                             @if ($address['address']['public'] === 1)
                                                                 <span class="badge bg-success address_public_status">Публічна</span>
@@ -145,6 +157,7 @@
                                                             @else
                                                                 <span class="badge bg-info address_public_status">Приватна </span>
                                                             @endif
+
                                                     </td>
                                                     <td>
                                                         <div class="dropdown">
@@ -176,7 +189,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-                            <h6 class="card-title mb-3">Profile Settings</h6>
+                            <h6 class="card-title mb-3">Налаштування профілю</h6>
                             <div class="text-center">
 
                                 <div class="mt-3">
@@ -185,43 +198,37 @@
                                     <p class="text-muted">Власник будинків</p>
                                 </div>
                             </div>
-                            <form action="javascript:void(0);">
+                            <form action="{{ route('profile.update') }}" method="post">
+                                {{@csrf_field()}}
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="firstnameInput" class="form-label">Нікнейм</label>
-                                            <input type="text" class="form-control" id="firstnameInput"
-                                                   placeholder="Enter your firstname" value="Sophia">
+                                            <input type="text" class="form-control" name="name" id="firstnameInput"
+                                                   placeholder="Введіть нікнейм" value="{{ Auth::user()->name  }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label for="emailInput" class="form-label">Email Address</label>
-                                            <input type="email" class="form-control" id="emailInput"
-                                                   placeholder="Enter your email" value="sophiabethany@judia.com">
+                                            <label for="emailInput" class="form-label">Email адреса</label>
+                                            <input type="email"  name="email" class="form-control" id="emailInput"
+                                                   placeholder="Введіть свій email" value="{{ Auth::user()->email  }}">
                                         </div>
                                     </div>
-                                    <!--end col-->
-
-
-                                    <!--end col-->
-
-                                    <!--end col-->
-
                                     <!--end col-->
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="cityInput" class="form-label">Місто</label>
-                                            <input type="text" class="form-control" id="cityInput" placeholder="City"
-                                                   value="Полтава">
+                                            <input type="text"  name="city" class="form-control" id="cityInput" placeholder="Ваше місто"
+                                                   value="{{ Auth::user()->city  }}">
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="countryInput" class="form-label">Країна</label>
-                                            <input type="text" class="form-control" id="countryInput"
-                                                   placeholder="Country" value="Україна">
+                                            <input type="text"  name="country" class="form-control" id="countryInput"
+                                                   placeholder="Ваша країна" value="{{ Auth::user()->country ?? 'Україна' }}">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -242,15 +249,17 @@
                         </div>
                         <div class="tab-pane fade" id="changePassword" role="tabpanel"
                              aria-labelledby="changePassword-tab">
-                            <h6 class="card-title mb-3">Changes Password</h6>
-                            <form action="#!">
+                            <h6 class="card-title mb-3">Змінити пароль</h6>
+                            <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+                                @csrf
+                                @method('put')
                                 <div class="row g-2 justify-content-lg-between align-items-center">
                                     <div class="col-lg-4">
                                         <div class="auth-pass-inputgroup">
-                                            <label for="oldpasswordInput" class="form-label">Old Password*</label>
+                                            <label for="oldpasswordInput" class="form-label">Старий пароль*</label>
                                             <div class="position-relative">
                                                 <input type="password" class="form-control password-input"
-                                                       id="oldpasswordInput" placeholder="Enter current password">
+                                                       id="oldpasswordInput" name="current_password" placeholder="Введіть старий пароль">
                                                 <button
                                                     class="btn btn-link position-absolute top-0 end-0 text-decoration-none text-muted password-addon"
                                                     type="button"><i class="ri-eye-fill align-middle"></i></button>
@@ -261,11 +270,11 @@
 
                                     <div class="col-lg-4">
                                         <div class="auth-pass-inputgroup">
-                                            <label for="password-input" class="form-label">New Password*</label>
+                                            <label for="password-input" class="form-label">Новий пароль*</label>
                                             <div class="position-relative">
                                                 <input type="password" class="form-control password-input"
                                                        id="password-input" onpaste="return false"
-                                                       placeholder="Enter new password"
+                                                       placeholder="Введіть новий пароль"  name="password"
                                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
                                                 <button
                                                     class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
@@ -277,12 +286,11 @@
 
                                     <div class="col-lg-4">
                                         <div class="auth-pass-inputgroup">
-                                            <label for="confirm-password-input" class="form-label">Confirm
-                                                Password*</label>
+                                            <label for="confirm-password-input" class="form-label">Підтвердіть пароль*</label>
                                             <div class="position-relative">
                                                 <input type="password" class="form-control password-input"
                                                        onpaste="return false" id="confirm-password-input"
-                                                       placeholder="Confirm password"
+                                                       placeholder="Підтвердіть пароль" name="password_confirmation"
                                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
                                                 <button
                                                     class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
@@ -291,11 +299,11 @@
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <a href="javascript:void(0);"
-                                           class="link-primary text-decoration-underline">Forgot Password ?</a>
+                                        <a
+                                           class="link-primary text-decoration-underline"></a>
                                         <div class="">
 
-                                            <button type="submit" class="btn btn-success">Change Password</button>
+                                            <button type="submit" class="btn btn-success">Змінити пароль</button>
                                         </div>
                                     </div>
 
@@ -333,47 +341,77 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0">
                 <div class="modal-header bg-soft-info p-3">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <h5 class="modal-title" id="exampleModalLabel2"></h5>
                     <button type="button" class="btn-close close-modal" data-bs-dismiss="modal" aria-label="Close"
                             id="close-modal"></button>
                 </div>
                 <form class="tablelist-form" novalidate autocomplete="off">
                     <div class="modal-body">
                         <div id="alert-error-msg" class="d-none alert alert-danger py-2"></div>
-                        <input type="hidden" id="id-field">
+
                         <div class="row g-3">
                             <div class="col-lg-12">
-
                                 <div>
-                                    <label for="customername-field" class="form-label">Name</label>
-                                    <input type="text" id="customername-field" class="form-control"
-                                           placeholder="Enter name" required />
+                                    <label for="customername-field2" class="form-label">Назва</label>
+                                    <input type="text" id="customername-field2" name="name" class="form-control"
+                                           placeholder="Введіть назву" required />
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div>
-                                    <label for="membership-field" class="form-label">Доступ</label>
-                                    <select class="form-control" name="membership-field" id="membership-field"
-                                            required />
-                                    <option value="true">Публічна</option>
-                                    <option value="false">Приватна</option>
+                                    <label for="type-field2" class="form-label">Виберіть тип</label>
+                                    <select class="form-control" name="type-field2" id="typeField2" required>
+                                        <option type="text" value="ip">Моя IP адреса</option>
+                                        <option type="text" value="url">Отримати url для запитів</option>
+                                    </select>
+                                    <div id="typedHelpBlock" class="form-text">
+                                        Вкажіть свою <a href="/faqs#info-ip">IP адресу</a>
+                                        або отримайте посилання для ваших запитів зручним для вас <a href="/faqs#info-myUrl">способом</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="ip_address2" class="form-label">Ваш IP адрес</label>
+                                    <input type="text" id="ip_address2" name="ip_address" class="form-control"
+                                           placeholder="Введіть IP адрес"  />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="url_address2" class="form-label">Ваш URL для надсилання запитів</label>
+                                    <input type="text" id="url_address2" name="url_address" class="form-control" value="" />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="membership-field2" class="form-label">Доступ</label>
+                                    <select class="form-control" name="membership-field2" id="membership-field2" required >
+                                    <option type="number" value="0">Приватна</option>
+                                    <option type="number" value="1">Публічна</option>
+
 
                                     </select>
                                 </div>
                             </div>
-
-
+                            <div class="col-lg-12">
+                                <div style="display: none">
+                                    <label for="link_id-field2" class="form-label">Публічне посилання</label>
+                                    <input type="text" id="link_id-field2" name="link" class="form-control"
+                                           placeholder="ваш лінк"  />
+                                </div>
+                            </div>
 
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success" id="add-btn">Add Contact</button>
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Закрити</button>
+                            <button type="submit" class="btn btn-success" id="add-btn">Додати</button>
                         </div>
                     </div>
                 </form>
@@ -399,12 +437,37 @@
                             <div class="col-lg-12">
 
                                 <div>
-                                    <label for="customername-field" class="form-label">Name</label>
+                                    <label for="customername-field" class="form-label">Назва</label>
                                     <input type="text" id="customername-field" name="name" class="form-control"
-                                           placeholder="Enter name" required />
+                                           placeholder="Введіть назву" required />
                                 </div>
                             </div>
-
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="type-field" class="form-label">Виберіть тип</label>
+                                    <select class="form-control" name="type-field" id="typeField" required>
+                                        <option type="text" value="ip">Моя IP адреса</option>
+                                        <option type="text" value="url">Отримати url для запитів</option>
+                                    </select>
+                                    <div id="typedHelpBlock" class="form-text">
+                                        Вкажіть свою <a href="/faqs#info-ip">IP адресу</a>
+                                        або отримайте посилання для ваших запитів зручним для вас <a href="/faqs#info-myUrl">способом</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="ip_address" class="form-label">Ваш IP адрес</label>
+                                    <input type="text" id="ip_address" name="ip_address" class="form-control"
+                                           placeholder="Введіть IP адрес" required />
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label for="url_address" class="form-label">Ваш URL для надсилання запитів</label>
+                                    <input type="text" id="url_address" name="url_address" class="form-control" value="" />
+                                </div>
+                            </div>
                             <div class="col-lg-12">
                                 <div>
                                     <label for="membership-field" class="form-label">Доступ</label>
@@ -430,7 +493,7 @@
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
                             <button type="button" class="btn btn-light close-modal" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success" id="update_address">Update</button>
+                            <button type="button" class="btn btn-success" id="update_address">Оновити</button>
                         </div>
                     </div>
                 </form>
@@ -454,15 +517,15 @@
                             <i class="bi bi-trash display-5"></i>
                         </div>
                         <div class="mt-4">
-                            <h4 class="mb-2">Are you sure ?</h4>
-                            <p class="text-muted mx-3 mb-0">Are you sure you want to remove this record ?</p>
+                            <h4 class="mb-2">Ви впевнені ?</h4>
+                            <p class="text-muted mx-3 mb-0">Ви точно хочете видалити цей запис?
+                            </p>
                         </div>
                     </div>
                     <div class="d-flex gap-2 justify-content-center mt-4 pt-2 mb-2">
                         <button type="button" class="btn w-sm btn-light btn-hover"
-                                data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn w-sm btn-danger btn-hover" id="delete-record">Yes, Delete
-                            It!</button>
+                                data-bs-dismiss="modal">Закрити</button>
+                        <button type="button" class="btn w-sm btn-danger btn-hover" id="delete-record">Так, Видалити!</button>
                     </div>
                 </div>
             </div><!-- /.modal-content -->

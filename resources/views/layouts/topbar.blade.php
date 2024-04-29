@@ -5,22 +5,29 @@
                 <div class="d-flex" id="header-logo">
                     <!-- LOGO -->
                     <div class="navbar-brand-box horizontal-logo">
-                        <a href="dashboard" class="logo logo-dark">
+                        @auth()
+                            <a href="/dashboard" class="logo logo-dark">
+                        @elseguest()
+                             <a href="/" class="logo logo-dark">
+                        @endauth
                             <span class="logo-sm">
-                                <img src="https://img.themesbrand.com/judia/logo-sm.png" alt="" height="22">
+                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="https://img.themesbrand.com/judia/logo-dark.png" alt=""
+                                <img src="/build/images/svitlo.PNG" alt=""
                                      height="22">
                             </span>
                         </a>
-
-                        <a href="dashboard" class="logo logo-light">
+                        @auth()
+                            <a href="/dashboard" class="logo logo-light">
+                        @elseguest()
+                            <a href="/" class="logo logo-light">
+                        @endauth
                             <span class="logo-sm">
-                                <img src="https://img.themesbrand.com/judia/logo-sm.png" alt="" height="22">
+                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="https://img.themesbrand.com/judia/logo-light.png" alt=""
+                                <img src="/build/images/svitlo.PNG" alt=""
                                      height="22">
                             </span>
                         </a>
@@ -41,21 +48,28 @@
                 <div class="app-menu navbar-menu mx-auto opacity-0">
                     <!-- LOGO -->
                     <div class="navbar-brand-box vertical-logo">
-                        <a href="dashboard" class="logo logo-dark">
+                        @auth()
+                            <a href="/dashboard" class="logo logo-dark">
+                        @elseguest()
+                            <a href="/" class="logo logo-dark">
+                        @endauth
                             <span class="logo-sm">
-                                <img src="https://img.themesbrand.com/judia/logo-sm.png" alt="" height="22">
+                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="https://img.themesbrand.com/judia/logo-dark.png" alt="" height="22">
+                                <img src="/build/images/svitlo.PNG" alt="" height="22">
                             </span>
                         </a>
-
-                        <a href="dashboard" class="logo logo-light">
+                        @auth()
+                            <a href="/dashboard" class="logo logo-light">
+                        @elseauth()
+                            <a href="/" class="logo logo-light">
+                        @endauth
                             <span class="logo-sm">
-                                <img src="https://img.themesbrand.com/judia/logo-sm.png" alt="" height="22">
+                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="https://img.themesbrand.com/judia/logo-light.png" alt="" height="22">
+                                <img src="/build/images/svitlo.PNG" alt="" height="22">
                             </span>
                         </a>
                     </div>
@@ -63,15 +77,57 @@
                         <ul class="navbar-nav" id="navbar-nav">
                             <li class="menu-title"><span data-key="t-menu">Меню</span></li>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="dashboard">
-                                    <i class="ph-gauge"></i> <span>Панель відстеження</span>
+                                <a href="/" class="nav-link menu-link">
+                                    <i class="ph-house"></i> <span>Головна</span>
                                 </a>
                             </li>
 
 
+                            <?php
+                            $address_id = $address_id ?? 1;
+                            ?>
+                            @if(Auth::check())
+                                <li class="nav-item">
+                                    <a href="/dashboard" class="nav-link menu-link">
+                                        <i class="ph-gauge"></i> <span>Панель відстеження</span>
+                                    </a>
+                                </li>
+                                @foreach(\App\Models\Address::where('user_id', Auth::user()->id)->get() as $address)
+                                    <li class="nav-item">
+                                        <a class="nav-link menu-link @if($address->id == $address_id ) active @endif" href="{{ route('dashboard') }}/{{ $address->id }}">
+                                            <i class="ph-map-pin"></i> <span>{{ $address->name }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
 
+                            @endif
 
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/faqs"><i class="ph-info"></i> <span>Довідка</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/forms"><i class="ph-keyboard-thin"></i> <span>Зворотній зв'язок </span></a>
+                            </li>
+                            @auth
 
+                            @else
+                                <ul class="navbar-nav">
+                                    <li class="menu-title"><span data-key="t-menu">Кабінет</span></li>
+                                    <li class="nav-item">
+                                        <a href="{{ route('login') }}" class="nav-link menu-link">
+                                            <i class="ph-login"></i> <span>Увійти</span>
+                                        </a>
+                                    </li>
+                                    @if (Route::has('register'))
+                                        <li class="nav-item">
+                                            <a href="{{ route('register') }}" class="nav-link menu-link">
+                                                <i class="ph-login"></i> <span>Реєстрація</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+
+                            @endauth
 
                         </ul>
                     </div>
@@ -101,7 +157,7 @@
                     </div>
 
 
-
+                    @if(Auth::check())
                     <div class="dropdown topbar-head-dropdown ms-2 header-item">
                         <button type="button" class="btn btn-icon rounded-circle" data-bs-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -139,6 +195,7 @@
 
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

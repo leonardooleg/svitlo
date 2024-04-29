@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id()->autoIncrement()->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('name');
-            $table->string('ip_address', 45);
+            $table->string('ip_address', 45)->nullable();
+            $table->string('url_address', 45)->nullable();
             $table->integer('public')->default(0);
             $table->string('link', 45)->nullable();
         });
@@ -24,7 +25,8 @@ return new class extends Migration
             $table->id()->autoIncrement()->primary();
             $table->foreignId('address_id')->index();
             $table->integer('ping')->nullable();
-            $table->integer('last_activity')->nullable();
+            $table->string('last_activity')->nullable();
+            $table->string('time_check')->nullable();
         });
     }
 

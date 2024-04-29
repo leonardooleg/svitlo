@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'LeonardoOleg',
             'email' => 'leonardooleg2@gmail.com',
+            'theme' => 'dark',
         ]);
         Address::create([
             'user_id' => 1,
@@ -28,11 +29,17 @@ class DatabaseSeeder extends Seeder
             'public' => '1',
             'link' => 'jhsdAHDI9hasuh',
         ]);
+        Address::create([
+            'user_id' => 1,
+            'name' => 'Оранж',
+            'url_address' => '1713478951512',
+        ]);
 
         Ping::create([
             'address_id' => 1,
-            'ping' => 10,
-            'last_activity' => 1712832814,
+            'ping' => 1,
+            'last_activity' => 1713479092,
+            'time_check' => 1713479092,
         ]);
     }
 }

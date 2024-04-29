@@ -57,10 +57,13 @@
                                             Введіть свою електронну пошту, і інструкції будуть надіслані вам!
                                         </div>
                                         <div class="p-2">
-                                            <form>
+                                            <form method="POST" action="{{ route('password.email') }}">
+                                                @csrf
+
+
                                                 <div class="mb-4">
                                                     <label class="form-label">Email або нікнейм</label>
-                                                    <input type="email" class="form-control bg-light border-light password-input" id="email" placeholder="Enter email or username" required >
+                                                    <input  type="email" name="email" class="form-control bg-light border-light password-input" id="email" placeholder="Enter email or username" required >
                                                 </div>
 
                                                 <div class="text-center mt-4">

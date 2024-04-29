@@ -72,7 +72,7 @@
                                                     <div class="position-relative ">
                                                         <input type="text"
                                                             class="form-control password-input @error('email') is-invalid @enderror"
-                                                            name="email" value="admin@themesbrand.com" id="email"
+                                                            name="email"  id="email"
                                                             placeholder="Enter email" required>
                                                         @error('email')
                                                             <span class="invalid-feedback text-start" role="alert">
@@ -92,7 +92,7 @@
                                                         <input type="password" name="password"
                                                             class="form-control pe-5 password-input @error('password') is-invalid @enderror"
                                                             placeholder="Enter password" id="password-input"
-                                                            value="12345678" required>
+                                                             required>
                                                         <button
                                                             class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
                                                             type="button" id="password-addon"><i

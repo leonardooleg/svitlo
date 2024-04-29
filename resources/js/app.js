@@ -752,7 +752,7 @@ File: Main Js File
 		const headerLogo = document.getElementById("header-logo")?.clientWidth ?? 0;
 		const headerItems = document.getElementById("header-items")?.clientWidth ?? 0;
 		const fullWidthOfMenu = navbarNav.clientWidth - headerLogo - headerItems - moreMenuWidth;
-		const extraMenuName = languageData ? languageData["t-more"] : "More";
+		const extraMenuName = languageData ? languageData["t-more"] : "Більше";
 		const dataLayout = document.documentElement.getAttribute("data-layout");
 		const menuData = document.querySelectorAll("ul.navbar-nav > li.nav-item");
 		let newMenus = "";

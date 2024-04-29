@@ -2,11 +2,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-6 text-center text-sm-start">
-                <script>document.write(new Date().getFullYear())</script> © Judia.
+                <script>document.write(new Date().getFullYear())</script> © Світло.
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block">
-                    Design & Develop by Themesbrand
+                    Моніторинг наявності світла вдома
                 </div>
             </div>
         </div>

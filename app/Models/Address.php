@@ -28,7 +28,9 @@ class Address extends Model
         'user_id',
         'name',
         'ip_address',
+        'url_address',
         'public',
+        'link',
     ];
 
     protected $guarded = [];

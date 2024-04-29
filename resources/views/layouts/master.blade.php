@@ -10,7 +10,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title> @yield('title') | Judia - Laravel 10 Admin & Dashboard Template</title>
+    <title> @yield('title') | Світло - Моніторинг наявності світла вдома</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Minimal Admin & Dashboard Template" name="description">
     <meta content="{{ @Auth::user()->name }}"  name="user" >
