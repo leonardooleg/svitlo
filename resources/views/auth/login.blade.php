@@ -79,6 +79,7 @@
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
+
                                                     </div>
                                                 </div>
 
@@ -120,12 +121,21 @@
                                                     <div class="signin-other-title position-relative">
                                                         <h5 class="fs-sm mb-4 title">Зайти з допомогою</h5>
                                                     </div>
+                                                    @isset ($error)
+                                                        <div class="alert alert-danger"> {{ $error }} </div>
+                                                    @endisset
+
                                                     <div class="pt-2 hstack gap-2 justify-content-center">
-                                                        <a href="{{ url('authorized/google') }}" class="btn btn-subtle-danger btn-icon"><i
+                                                        <a href="{{ url('auth/google/redirect') }}" class="btn btn-subtle-danger btn-icon"><i
                                                                 class="ri-google-fill fs-lg"></i></a>
-                                                        <a href="{{ url('authorized/github') }}" class="btn btn-subtle-dark btn-icon"><i
+                                                        <a href="{{ url('auth/github/redirect') }}" class="btn btn-subtle-dark btn-icon"><i
                                                                 class="ri-github-fill fs-lg"></i></a>
                                                     </div>
+
+
+
+
+
                                                 </div>
                                             </form>
 

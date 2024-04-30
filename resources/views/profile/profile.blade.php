@@ -232,7 +232,13 @@
                                         </div>
                                     </div>
                                     <!--end col-->
-
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="countryInput" class="form-label">Telegram</label>
+                                            <input type="text"  name="telegram" class="form-control" id="telegramInput"
+                                                   placeholder="Ваш Telegram" >
+                                        </div>
+                                    </div>
                                     <!--end col-->
 
                                     <!--end col-->

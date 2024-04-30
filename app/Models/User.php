@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Address;
+use Illuminate\Support\Str;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -24,6 +26,10 @@ class User extends Authenticatable
         'theme',
         'city',
         'country',
+        'provider',
+        'provider_id',
+        'provider_token',
+        'email_verified_at',
     ];
 
     /**
@@ -55,4 +61,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Address::class, 'user_id');
     }
+
 }

@@ -19,7 +19,10 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('theme')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->nullable();
+            $table->string('provider_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
