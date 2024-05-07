@@ -122,6 +122,7 @@ if (is_string($response)) {
 
                                     </code>
                                  </pre>
+                                <a href="/storage/app_windows_linux/ping.php" download="ping.php" target="_blank">Посилання на PHP файл</a>
                             </div>
                         </div>
                     </div>
@@ -136,7 +137,7 @@ if (is_string($response)) {
                         <div id="genques-collapseFour" class="accordion-collapse collapse"
                             aria-labelledby="info-Python" data-bs-parent="#genques-accordion">
                             <div class="accordion-body">
-                                Ось <a href="/"> посилання на Github</a> де ви знайдете сам код скрипта для запитів. Також за допомогою цього скрипта зможете зібрати додаток для своєї платформи
+                                Ось <a href="/storage/app_windows_linux/ping.py" download="ping.py" target="_blank"> посилання</a> де ви знайдете сам код скрипта для запитів. Також за допомогою цього скрипта зможете зібрати додаток для своєї платформи
                             </div>
                         </div>
                     </div>
@@ -151,53 +152,28 @@ if (is_string($response)) {
                         <div id="genques-collapseFive" class="accordion-collapse collapse"
                             aria-labelledby="info-Windows" data-bs-parent="#genques-accordion">
                             <div class="accordion-body">
-                                Якщо у вас не має можливості запустити скрипт для моніторингу в <a href="#info-Cron">Linux</a>, то ось <a href="/"> посилання на Github</a> де ви знайдете простеньку програму Windows для моніторингу створену із  <a href="/"> Python коду</a>.
+                                Якщо у вас не має можливості запустити скрипт для моніторингу в <a href="#info-Cron">Linux</a>, то ось <a href="/storage/app_windows_linux/Svitlo.exe" download="Svitlo.exe" target="_blank"> посилання</a> де ви знайдете простеньку програму Windows для моніторингу створену із  <a href="/storage/app_windows_linux/ping.py" download="ping.py" target="_blank"> Python коду</a>.
                                 Недолік, вона повинна бути постійно запущена на увімкненому ПК.
                             </div>
                         </div>
                     </div>
 
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="info-PHP">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#genques-collapseFour6" aria-expanded="false"
-                                    aria-controls="genques-collapseFour6">
-                                Як відправляти самому запити для моніторингу PHP скриптом?
-                            </button>
-                        </h2>
-                        <div id="genques-collapseFour6" class="accordion-collapse collapse"
-                             aria-labelledby="info-PHP" data-bs-parent="#genques-accordion">
-                            <div class="accordion-body">
-                                <pre class="language-markup">
-                                        <code class="language-markup">
-function curlGetHttps($url) {
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-    $response = curl_exec($ch);
-    $error = curl_error($ch);
-    curl_close($ch);
-    if ($error) {
-        return "Error: " . $error;
-    } else {
-        return $response;
-    }
-}
-// Приклад визову функції
-$url = "ВАШЕ ПОСИЛАННЯ"; // Замінити на своє посилання URL для потрібного будинку
-$response = curlGetHttps($url);
-if (is_string($response)) {
-    echo "Response:\n" . $response;
-} else {
-    echo "Error: Could not get response.";
-}
-
-                                    </code>
-                                 </pre>
-                            </div>
+                    <h2 class="accordion-header" id="info-Arduino">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#genques-collapseFour2" aria-expanded="false"
+                                aria-controls="genques-collapseFour2">
+                            Як відправляти самому запити для моніторингу на платі Arduino?
+                        </button>
+                    </h2>
+                    <div id="genques-collapseFour2" class="accordion-collapse collapse"
+                         aria-labelledby="info-Arduino" data-bs-parent="#genques-accordion">
+                        <div class="accordion-body">
+                            Це самий оптимальний варіант. Це дешеві плати і прості у використанні.
+                            Ось <a href="/storage/app_windows_linux/svitlo.link.ino" download="svitlo.link.ino" target="_blank"> посилання</a> де ви знайдете сам код скрипта для запитів.
                         </div>
                     </div>
+                </div>
                 <!--end accordion-->
             </div>
         </div>
