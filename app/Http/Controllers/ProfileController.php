@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use function Laravel\Prompts\form;
@@ -34,6 +35,7 @@ class ProfileController extends Controller
                 if ($ping) {
                     $ping= $ping->toArray();
                     $minutesAgo = ceil((time() - $ping['last_activity']) / 60);
+                    $ping= $ping['ping'];
                 }else{
                     $ping= false;
                     $minutesAgo = false;
@@ -63,6 +65,8 @@ class ProfileController extends Controller
             'email' => ['required', 'email'], // Use 'ip' rule for validation
             'city' => ['string', 'max:50', 'nullable'],
             'country' => ['string', 'max:50', 'nullable'],
+            'telegram_id' => ['numeric', 'max:999999999', 'nullable'],
+            'notification' => ['string', 'max:50', 'nullable'],
 
         ]);
 
@@ -75,12 +79,16 @@ class ProfileController extends Controller
         // Check for null values
         $city = $request->input('city') === null ? null : $request->input('city');
         $country = $request->input('country') === null ? null : $request->input('country');
+        $telegram_id = $request->input('telegram_id') === null ? null : $request->input('telegram_id');
+        $notification = $request->input('notification') === null ? null : $request->input('notification');
 
         // Update address in database
         $user->name = $name;
         $user->email = $email;
         $user->city = $city;
         $user->country = $country;
+        $user->telegram_id = $telegram_id;
+        $user->notification = $notification;
         $user->save();
 
 
@@ -145,16 +153,20 @@ class ProfileController extends Controller
     public function user_form(Request $request)
     {
         $subject = "Feedback from " . $request->input('name');
-        $body = "Message: \n" . $request->input('message');
-        $recipient = "leonardooleg2@gmail.com";
-        $sent = mail($recipient, $subject, $body);
-        if ($sent) {
-            echo "Email sent successfully!";
-        } else {
-            echo "Error sending email.";
-        }
 
 
+        $to_name = $request->input('name');
+        $to_email = "leonardooleg2@gmail.com";
+        $data = [
+            'name' => $to_name,
+            'body' => "Email: " . $request->input('email'). " \n\r Message: \n" . $request->input('message'),
+
+        ];
+
+        Mail::send('emails.notification', $data, function($message) use ($subject, $to_name, $to_email) {
+            $message->to($to_email, $to_name)
+                ->subject($subject);
+        });
 
 
         return Redirect::to('/');

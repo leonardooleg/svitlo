@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TelegramController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -36,7 +37,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/addresses/delete/{id}', [AddressesController::class, 'destroy']);
 
 
+
 });
+
+Route::post('/telegram/webhook', [TelegramController::class, 'handle']);
 
 
 require __DIR__.'/auth.php';

@@ -162,14 +162,14 @@
                         <button type="button" class="btn btn-icon rounded-circle" data-bs-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
                             <img class="rounded-circle img-fluid"
-                                 src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/user-dummy-img.jpg') }} @endif"
+                                 src="@if (Auth::user()->avatar != '') {{ URL::asset('/images/' . Auth::user()->avatar) }}@else{{ URL::asset('/build/images/users/user-dummy-img.jpg') }} @endif"
                                  alt="Header Avatar">
                         </button>
                         <div class="dropdown-menu p-2 dropdown-menu-end">
                             <div class="d-flex gap-2 mb-3 topbar-profile">
                                 <div class="position-relative">
                                     <img class="rounded-1"
-                                         src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/multi-user.jpg') }} @endif"
+                                         src="@if (Auth::user()->avatar != '') {{ URL::asset('/images/' . Auth::user()->avatar) }}@else{{ URL::asset('/build/images/users/multi-user.jpg') }} @endif"
                                          alt="Header Avatar">
                                     <span
                                         class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-success"><span
@@ -183,8 +183,7 @@
                             </div>
                             <a href="{{ route('profile.edit') }}" class="dropdown-item"><i
                                     class="bi bi-person align-middle me-2"></i> Профіль</a>
-                            <a href="pages-profile" class="dropdown-item"><i
-                                    class="bi bi-person-gear align-middle me-2"></i> Налаштування профілю</a>
+
                             <a href="javascript:void(0)" class="dropdown-item" href="javascript:void();"
                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                     class="bi bi-box-arrow-right align-middle me-2"></i>Вийти</a>

@@ -2,27 +2,36 @@
 
 use App\Models\Ping;
 
+use BotMan\BotMan\BotManFactory;
+use BotMan\BotMan\Drivers\DriverManager;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schedule;
+use App\Helpers\NotificationHelper;
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
 
+
+
+
 Schedule::call(function () {
+    $notificationHelper = new NotificationHelper();
 
     $ip_address = \App\Models\Address::whereNotNull('ip_address')->get();
     foreach ($ip_address as $one_address) {
         //get ping
         $maxAttempts = 3;  // Максимальна кількість спроб ping
-        $timeout = 180;      // Таймаут очікування (мс)
+        $timeout = 90;      // Таймаут очікування (мс)
         $sleepTime = 20;     // Час затримки між спробами (мс)
 
         $latency = 0;
         $host = $one_address['ip_address'];
         $ttl = 128;
+
 
         // Створити об'єкт ping один раз
         $ping = new \JJG\Ping($host, $ttl, $timeout);
@@ -46,79 +55,72 @@ Schedule::call(function () {
         // Зберігання даних (замінити на prepared statement)
         if ($latency >=1) {
             $latency = 1;
+            $status = 'Онлайн';
         }else{
             $latency = 0;
+            $status = 'Офлайн';
         }
         $pings = Ping::where('address_id', $one_address['id']);
         $now_time = time();
         if ($pings->count() > 0) {
             $last_ping = $pings->latest('last_activity')->first();
+            file_put_contents('cron.log', "\n".$one_address['name']."\n\r".$message."\n\r".$last_ping->last_activity."\n\r".$last_ping->ping."\n\r". $latency."\n", FILE_APPEND);
             if ($last_ping->ping != $latency) {
                 // Створити новий запис Ping
                 Ping::create([
                     'address_id' => $one_address['id'],
                     'ping' => $latency,
                     'last_activity' => $now_time,
-                    'time_check' => $now_time,
                 ]);
-            }else{
-                // оновити запис Ping
-                $last_ping->update([
-                    'time_check' => $now_time
-                ]);
+                $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], $status);
             }
+
         } else {
             // Створити новий запис Ping, оскільки не знайдено попередніх записів
             Ping::create([
                 'address_id' => $one_address['id'],
                 'ping' => $latency,
                 'last_activity' => $now_time,
-                'time_check' => $now_time,
             ]);
+            $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], 'Онлайн');
         }
 
 
     }
 
-    $url_address = \App\Models\Address::whereNotNull('url_address')->get();
-    foreach ($url_address as $url_address) {
+    $url_addresses = \App\Models\Address::whereNotNull('url_address')->get();
+    foreach ($url_addresses as $url_address) {
 
         ///////////////////////
         $url_pings = Ping::where('address_id', $url_address['id']);
+        $status=false;
         $now_time = time();
         if ($url_pings->count() > 0) {
-            $last_ping = $url_pings->latest('time_check')->first();
+            $last_ping = $url_pings->latest('last_activity')->first();
             $now_date= (int)strtotime("-7 minutes");
-            $status_date=(int)$last_ping->time_check;
-            if($now_date<$status_date){
+            $status_date=(int)$last_ping->last_activity;
+            if($now_date>$status_date){
 
-                    $last_ping->update([
-                        'time_check' => $now_time
-                    ]);
-
-                print 'Дім '.$url_address['name'].'  - Оновлюється';
-            }else{
                 if ($last_ping->ping == 1) {
                     Ping::create([
                         'address_id' => $url_address['id'],
                         'ping' => 0,
                         'last_activity' => $now_time,
-                        'time_check' => $now_time,
                     ]);
                     print 'Дім '.$url_address['name'].'  - Застарів.';
-                }else{
-                    $last_ping->update([
-                        'time_check' => $now_time
-                    ]);
+                    $notificationHelper->push_notification($url_address['user_id'], $url_address['name'], 'Офлайн');
                 }
+
             }
+
         }
     }
 
 
 
-})->everyMinute();
-//})->everyThreeMinutes();
 
 
+})->everyThreeMinutes();
+
+/*})->everyMinute();*/
 

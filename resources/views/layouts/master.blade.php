@@ -15,7 +15,7 @@
     <meta content="Minimal Admin & Dashboard Template" name="description">
     <meta content="{{ @Auth::user()->name }}"  name="user" >
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ URL::asset('build/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('/build/images/favicon.ico') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 

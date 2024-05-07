@@ -38,10 +38,10 @@
                                     <div
                                         class="card-body py-5 d-flex justify-content-between flex-column h-100 position-relative gap-4">
                                         <div class="text-center">
-                                            <h2 class="text-white fw-medium lh-base text-capitalize mb-3">Let's get started
-                                                with your <span class="text-warning">30 days free trial</span></h2>
-                                            <p class="text-white text-opacity-75">It brings together your tasks, projects,
-                                                timelines, files and more</p>
+                                            <div class="text-center">
+                                                <h2 class="text-white fw-medium lh-base text-capitalize mb-3">Створіть акаунт для <span class="text-warning">відстеження наявності світла</span></h2>
+                                                <p class="text-white text-opacity-75">у вас вдома чи родичів</p>
+                                            </div>
                                         </div>
 
                                         <div class="text-center">
@@ -49,9 +49,9 @@
                                                 &copy;
                                                 <script>
                                                     document.write(new Date().getFullYear())
-                                                </script> Judia. Crafted with <i
-                                                    class="bi bi-heart-fill text-danger"></i> by <a href="#!"
-                                                    class="text-white">Themesbrand</a>
+                                                </script> Світло.  <i
+                                                    class="bi bi-heart-fill text-danger"></i> Моніторинг <a href="#!"
+                                                                                                            class="text-white">наявності світла</a>
                                             </p>
                                         </div>
                                     </div>
@@ -150,19 +150,25 @@
                                                     <button class="btn btn-primary w-100" type="submit">Зареєструватись</button>
                                                 </div>
 
-                                                <div class="mt-4 text-center">
+                                                <div class="mt-4 pt-2 text-center">
                                                     <div class="signin-other-title position-relative">
-                                                        <h5 class="fs-sm mb-4 title text-muted">Увійти за допомогою</h5>
+                                                        <h5 class="fs-sm mb-4 title">Увійти з допомогою</h5>
                                                     </div>
+                                                    @isset ($error)
+                                                        <div class="alert alert-danger"> {{ $error }} </div>
+                                                    @endisset
 
-                                                    <div>
-                                                        <a href="{{ url('authorized/google') }}"
-                                                            class="btn btn-subtle-danger btn-icon"><i
+                                                    <div class="pt-2 hstack gap-2 justify-content-center">
+                                                        <a href="{{ url('auth/google/redirect') }}" class="btn btn-subtle-danger btn-icon"><i
                                                                 class="ri-google-fill fs-lg"></i></a>
-                                                        <a href="{{ url('authorized/github') }}"
-                                                            class="btn btn-subtle-dark btn-icon"><i
+                                                        <a href="{{ url('auth/github/redirect') }}" class="btn btn-subtle-dark btn-icon"><i
                                                                 class="ri-github-fill fs-lg"></i></a>
                                                     </div>
+
+
+
+
+
                                                 </div>
                                             </form>
                                         </div>
@@ -188,5 +194,5 @@
 @endsection
 @section('scripts')
     <!-- password create init js-->
-    <script src="{{ URL::asset('build/js/pages/passowrd-create.init.js') }}"></script>
+    <script src="{{ URL::asset('/build/js/pages/passowrd-create.init.js') }}"></script>
 @endsection

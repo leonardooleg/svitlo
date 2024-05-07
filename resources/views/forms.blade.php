@@ -26,31 +26,32 @@
                                                 <div class="col-md-3">
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <form class="tablelist-form" novalidate autocomplete="off" action="/form" method="post">
+                                                    <form  action="/forms" method="post" >
                                                         @csrf
-                                                    <div>
-                                                        <label for="basiInput" class="form-label pt-3">Тема чи Ім'я</label>
-                                                        <input type="text" class="form-control" name="name" id="basiInput">
-                                                    </div>
 
-                                                    <div>
-                                                        <label for="iconInput"  class="form-label pt-3">Свою пошту</label>
-                                                        <div class="form-icon">
-                                                            <input type="email" name="email" class="form-control form-control-icon" id="iconInput"
-                                                                   @auth
-                                                                       value="{{@Auth::user()->email}}"
-                                                                   @endauth
-                                                                   placeholder="example@gmail.com">
-                                                            <i class="ri-mail-unread-line"></i>
+                                                        <div>
+                                                            <label for="basiInput" class="form-label pt-3">Тема чи Ім'я</label>
+                                                            <input type="text" class="form-control" name="name" id="basiInput">
                                                         </div>
-                                                    </div>
 
-                                                    <div>
-                                                        <label for="exampleFormControlTextarea5" class="form-label pt-3">Текст повідомлення</label>
-                                                        <textarea class="form-control" name="message"  id="exampleFormControlTextarea5" rows="5"></textarea>
-                                                    </div>
+                                                        <div>
+                                                            <label for="iconInput"  class="form-label pt-3">Свою пошту</label>
+                                                            <div class="form-icon">
+                                                                <input type="email" name="email" class="form-control form-control-icon" id="iconInput"
+                                                                       @auth
+                                                                           value="{{@Auth::user()->email}}"
+                                                                       @endauth
+                                                                       placeholder="example@gmail.com">
+                                                                <i class="ri-mail-unread-line"></i>
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            <label for="exampleFormControlTextarea5" class="form-label pt-3">Текст повідомлення</label>
+                                                            <textarea class="form-control" name="message"  id="exampleFormControlTextarea5" rows="5"></textarea>
+                                                        </div>
                                                         <div class="pt-3">
-                                                            <botton type="submit" class="btn btn-primary ">Надіслати</botton>
+                                                            <button type="submit" class="btn btn-primary ">Надіслати</button>
                                                         </div>
 
                                                     </form>
@@ -75,7 +76,7 @@
 @section('scripts')
 
         <!-- prismjs plugin -->
-        <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
+        <script src="{{ URL::asset('/build/libs/prismjs/prism.js') }}"></script>
 <!-- App js -->
-<script src="{{ URL::asset('build/js/app.js') }}"></script>
+<script src="{{ URL::asset('/build/js/app.js') }}"></script>
 @endsection

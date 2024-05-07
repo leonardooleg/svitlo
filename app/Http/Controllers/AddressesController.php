@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\NotificationHelper;
 use App\Http\Requests\AddressesRequest;
 use App\Models\Ping;
 use Illuminate\Http\Request;
@@ -79,6 +80,7 @@ class AddressesController extends Controller
      */
     public function show($url_address)
     {
+        $notificationHelper = new NotificationHelper();
         $cacheKey = "address:$url_address"; // Define a unique cache key
 
         // Check if request limit exceeded within the throttle period
@@ -96,33 +98,37 @@ class AddressesController extends Controller
         }
         $pings = Ping::where('address_id', $id_address->id)->latest('last_activity')->get();
         $now_time = time();
+        $status= false;
         if ($pings->count() > 0) {
             $last_ping = $pings->first();
             if ($last_ping->ping != 1) {
+                $status = 'Онлайн';
                 Ping::create([
                     'address_id' => $id_address->id,
                     'ping' => 1,
                     'last_activity' => $now_time,
-                    'time_check' => $now_time,
                 ]);
             }else{
                 // оновити запис Ping
                 $last_ping->update([
-                    'time_check' => $now_time
+                    'last_activity' => $now_time
                 ]);
             }
         } else {
+            $status = 'Онлайн';
             // Створити новий запис Ping, оскільки не знайдено попередніх записів
             Ping::create([
                 'address_id' => $id_address->id,
                 'ping' => 1,
                 'last_activity' => $now_time,
-                'time_check' => $now_time,
             ]);
         }
         // Store request timestamp in cache with desired throttle period
         Cache::put($cacheKey, true, 30); // Cache for 30 seconds
+        if ($status){
+            $notificationHelper->push_notification($id_address->user_id, $id_address->name, $status);
 
+        }
         return response()->json(['address' => $url_address, 'status' => 'online']);
 
     }
@@ -159,19 +165,19 @@ class AddressesController extends Controller
 
         // Check for null values
         $publicLink = $request->input('link') === null ? null : $request->input('link');
-
+        $publicLink =$this->url_check($publicLink);
+        if($publicLink===false){
+            return response()->json([
+                'message' => 'Error',
+            ]);
+        }
         $url_address =$this->url_check($url_address);
         if($url_address===false){
             return response()->json([
                 'message' => 'Error',
             ]);
         }
-        $publicLink =$this->url_check($publicLink);
-       if($publicLink===false){
-            return response()->json([
-                'message' => 'Error',
-            ]);
-        }
+
         // Update address in database
         $address->name = $addressName;
         $address->ip_address = $ip_address;

@@ -4,7 +4,7 @@
 @endsection
 @section('css')
     <!-- Sweet Alert css-->
-    <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('/build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 @section('content')
 
@@ -23,7 +23,7 @@
                     <div class="col-sm-auto">
                         <div class="position-relative d-inline-block">
                             <img
-                                src="@if (Auth::user()->avatar != '') {{ URL::asset('images/' . Auth::user()->avatar) }}@else{{ URL::asset('build/images/users/user-dummy-img.jpg') }} @endif"
+                                src="@if (Auth::user()->avatar != '') {{ URL::asset('/images/' . Auth::user()->avatar) }}@else{{ URL::asset('/build/images/users/user-dummy-img.jpg') }} @endif"
                                 alt=""
                                 class="avatar-xl rounded p-1 bg-body-secondary">
                             <span class="position-absolute profile-dot bg-success rounded-circle"><span
@@ -39,12 +39,12 @@
                     </div>
                     <div class="col-sm-auto mb-3">
                         <div class="hstack gap-2">
-                            <button class="btn btn-subtle-success">Hire Now</button>
+                            <button class="btn btn-subtle-success">Онлайн</button>
                             <button type="button" class="btn btn-outline-secondary custom-toggle active"
                                     data-bs-toggle="button" aria-pressed="false">
-                                <span class="icon-on"><i class="ri-add-line align-bottom me-1"></i> Follow</span>
+                                <span class="icon-on"><i class="ri-add-line align-bottom me-1"></i> Слідкувати</span>
                                 <span class="icon-off"><i class="ri-user-unfollow-line align-bottom me-1"></i>
-                                Unfollow</span>
+                                Відписатись</span>
                             </button>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                                             </th>
                                             <th class="sort cursor-pointer" data-sort="name">Будинок</th>
                                             <th class="sort cursor-pointer" data-sort="company_name">Статус</th>
-                                            <th class="sort cursor-pointer" data-sort="membership">Остання активність</th>
+                                            <th class="sort cursor-pointer" data-sort="membership">Останні зміни статусу</th>
                                             <th class="sort cursor-pointer" data-sort="membership">Доступ</th>
                                             <th>Дія</th>
                                         </tr>
@@ -138,7 +138,7 @@
                                                     </td>
 
                                                     <td class="membership">
-                                                        @if ($address['ping']['ping'] === 1)
+                                                        @if ($address['ping'] === 1)
                                                             <span class="badge bg-warning">Онлайн</span>
                                                         @else
                                                             <span class="badge bg-danger">Офлайн </span>
@@ -147,7 +147,7 @@
                                                         @if ($address['minutesAgo'] >= 1)
                                                             {{ $address['minutesAgo'] }} хв. назад
                                                         @else
-                                                            не має даних
+                                                            немає даних
                                                         @endif
                                                     </td>
                                                     <td class="membership address_public">
@@ -220,7 +220,7 @@
                                         <div class="mb-3">
                                             <label for="cityInput" class="form-label">Місто</label>
                                             <input type="text"  name="city" class="form-control" id="cityInput" placeholder="Ваше місто"
-                                                   value="{{ Auth::user()->city  }}">
+                                                   value="{{ Auth::user()->city ?? '' }}">
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -228,19 +228,31 @@
                                         <div class="mb-3">
                                             <label for="countryInput" class="form-label">Країна</label>
                                             <input type="text"  name="country" class="form-control" id="countryInput"
-                                                   placeholder="Ваша країна" value="{{ Auth::user()->country ?? 'Україна' }}">
+                                                   placeholder="Ваша країна" value="{{ Auth::user()->country ?? 'Україна' }}">
                                         </div>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <label for="countryInput" class="form-label">Telegram</label>
-                                            <input type="text"  name="telegram" class="form-control" id="telegramInput"
-                                                   placeholder="Ваш Telegram" >
+                                            <input type="text"  name="telegram_id" class="form-control" id="telegramInput"
+                                                   placeholder="Ваш Telegram" value="{{ Auth::user()->telegram_id ?? '' }}">
+                                            <a href="https://t.me/svitlo_link_bot?start=1">Посилання на Telegram бота</a>
+
                                         </div>
                                     </div>
                                     <!--end col-->
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label" for="inputGroupSelect012">Отримувати сповіщення</label>
+                                            <select class="form-control form-select" name="notification" id="inputGroupSelect012">
+                                                <option @if( Auth::user()->notification === null) selected @endif>Вибрати...</option>
+                                                <option value="email"  @if( Auth::user()->notification === 'email') selected @endif>На email пошту</option>
+                                                <option value="telegram"  @if( Auth::user()->notification === 'telegram') selected @endif>Телеграм</option>
+                                            </select>
 
+                                        </div>
+                                    </div>
                                     <!--end col-->
                                     <div class="col-lg-12">
                                         <div class="hstack gap-2 justify-content-end">
@@ -319,16 +331,16 @@
                                         <div class="card bg-light shadow-none passwd-bg" id="password-contain">
                                             <div class="card-body">
                                                 <div class="mb-4">
-                                                    <h5 class="fs-sm">Password must contain:</h5>
+                                                    <h5 class="fs-sm">Пароль повинен містити:</h5>
                                                 </div>
                                                 <div class="">
-                                                    <p id="pass-length" class="invalid fs-xs mb-2">Minimum <b>8
-                                                            characters</b></p>
-                                                    <p id="pass-lower" class="invalid fs-xs mb-2">At <b>lowercase</b>
-                                                        letter (a-z)</p>
-                                                    <p id="pass-upper" class="invalid fs-xs mb-2">At least
-                                                        <b>uppercase</b> letter (A-Z)</p>
-                                                    <p id="pass-number" class="invalid fs-xs mb-0">A least <b>number</b>
+                                                    <p id="pass-length" class="invalid fs-xs mb-2">Мінімум <b>8
+                                                            символів</b></p>
+                                                    <p id="pass-lower" class="invalid fs-xs mb-2">Мати <b>маленькі</b>
+                                                        літери (a-z)</p>
+                                                    <p id="pass-upper" class="invalid fs-xs mb-2">Містити
+                                                        <b>великі</b> літери (A-Z)</p>
+                                                    <p id="pass-number" class="invalid fs-xs mb-0">Містити в собі <b>цифри</b>
                                                         (0-9)</p>
 
                                                 </div>
@@ -376,7 +388,7 @@
                                     </select>
                                     <div id="typedHelpBlock" class="form-text">
                                         Вкажіть свою <a href="/faqs#info-ip">IP адресу</a>
-                                        або отримайте посилання для ваших запитів зручним для вас <a href="/faqs#info-myUrl">способом</a>
+                                        або отримайте посилання для ваших запитів зручним для вас <a href="/faqs#info-myUrl">методом</a>
                                     </div>
                                 </div>
                             </div>
@@ -457,7 +469,7 @@
                                     </select>
                                     <div id="typedHelpBlock" class="form-text">
                                         Вкажіть свою <a href="/faqs#info-ip">IP адресу</a>
-                                        або отримайте посилання для ваших запитів зручним для вас <a href="/faqs#info-myUrl">способом</a>
+                                        або отримайте посилання для ваших запитів зручним для вас <a href="/faqs#info-myUrl">методом</a>
                                     </div>
                                 </div>
                             </div>
@@ -542,22 +554,22 @@
 @endsection
 @section('scripts')
     <!-- sweetalert2 js -->
-    <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ URL::asset('/build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <!--list js-->
 
-    <script src="{{ URL::asset('build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
+    <script src="{{ URL::asset('/build/libs/list.pagination.js/list.pagination.min.js') }}"></script>
 
     <!-- password-create init -->
-    <script src="{{ URL::asset('build/js/pages/passowrd-create.init.js') }}"></script>
+    <script src="{{ URL::asset('/build/js/pages/passowrd-create.init.js') }}"></script>
 
     <!-- customer -->
-    <script src="{{ URL::asset('build/js/pages/addresses-list.init.js') }}"></script>
+    <script src="{{ URL::asset('/build/js/pages/addresses-list.init.js') }}"></script>
 
     <!--profile init js-->
-    {{--<script src="{{ URL::asset('build/js/pages/profile.init.js') }}"></script>--}}
+    {{--<script src="{{ URL::asset('/build/js/pages/profile.init.js') }}"></script>--}}
 
     <!-- App js -->
-    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    <script src="{{ URL::asset('/build/js/app.js') }}"></script>
     <script>
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('btn')) {

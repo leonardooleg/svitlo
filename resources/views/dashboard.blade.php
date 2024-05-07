@@ -4,7 +4,7 @@
 @endsection
 @section('css')
     <!-- jsvectormap css -->
-    <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ URL::asset('/build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css">
     <style>
 
         /*графік*/
@@ -407,7 +407,7 @@
         <div class="col-xl-4 col-lg-4">
             <div class="card card-height-100">
                 <div class="card-header d-flex">
-                    <h5 class="card-title mb-0 flex-grow-1">Top Country</h5>
+                    <h5 class="card-title mb-0 flex-grow-1">Топ міст по відстеженню</h5>
                     <div class="flex-shrink-0">
                         <div class="dropdown card-header-dropdown">
                             <a class="text-reset dropdown-btn" href="#!" data-bs-toggle="dropdown"
@@ -423,47 +423,23 @@
                 </div>
                 <div class="card-body">
                     <div class="p-3 text-center bg-light bg-opacity-50 mb-4 rounded">
-                        <h4 class="mb-0">$<span class="counter-value" data-target="314.57">0</span>M <span
-                                class="text-muted fw-normal fs-sm"><span class="text-success fw-medium"><i
-                                        class="bi bi-arrow-up"></i> +23.57%</span> Last Month</span></h4>
+                        <h4 class="mb-0"><span class="counter-value" data-target="{{ $pingStats['pingCountCurrent'] }}">0</span> відключень <span
+                                class="text-muted fw-normal fs-sm"><span class="@if($pingStats['trend'] == 'plus') text-success @elseif($pingStats['trend'] == 'minus') text-danger @endif  fw-medium"><i
+                                        class="bi @if($pingStats['trend'] == 'plus')bi-arrow-up @elseif($pingStats['trend'] == 'minus') bi-arrow-down @endif "></i> {{ $pingStats['percentageDifference'] ?? 0 }}%</span> В попередньому місяці</span></h4>
                     </div>
                     <ul class="list-unstyled vstack gap-2 mb-0">
-                        <li class="d-flex align-items-center gap-2">
-                            <img src="https://img.themesbrand.com/judia/flags/us.svg" alt="" height="16"
-                                 class="rounded-circle object-fit-cover">
-                            <h6 class="flex-grow-1 mb-0">United States</h6>
-                            <p class="text-muted mb-0">39.41%</p>
-                        </li>
-                        <li class="d-flex align-items-center gap-2">
-                            <img src="https://img.themesbrand.com/judia/flags/de.svg" alt="" height="16"
-                                 class="rounded-circle object-fit-cover">
-                            <h6 class="flex-grow-1 mb-0">Germany</h6>
-                            <p class="text-muted mb-0">16.84%</p>
-                        </li>
-                        <li class="d-flex align-items-center gap-2">
-                            <img src="https://img.themesbrand.com/judia/flags/fr.svg" alt="" height="16"
-                                 class="rounded-circle object-fit-cover">
-                            <h6 class="flex-grow-1 mb-0">France</h6>
-                            <p class="text-muted mb-0">12.54%</p>
-                        </li>
-                        <li class="d-flex align-items-center gap-2">
-                            <img src="https://img.themesbrand.com/judia/flags/ua.svg" alt="" height="16"
-                                 class="rounded-circle object-fit-cover">
-                            <h6 class="flex-grow-1 mb-0">Ukraine</h6>
-                            <p class="text-muted mb-0">11.13%</p>
-                        </li>
-                        <li class="d-flex align-items-center gap-2">
-                            <img src="https://img.themesbrand.com/judia/flags/br.svg" alt="" height="16"
-                                 class="rounded-circle object-fit-cover">
-                            <h6 class="flex-grow-1 mb-0">Brazil</h6>
-                            <p class="text-muted mb-0">9.17%</p>
-                        </li>
-                        <li class="d-flex align-items-center gap-2">
-                            <img src="https://img.themesbrand.com/judia/flags/se.svg" alt="" height="16"
-                                 class="rounded-circle object-fit-cover">
-                            <h6 class="flex-grow-1 mb-0">Sweden</h6>
-                            <p class="text-muted mb-0">1.25%</p>
-                        </li>
+                        @foreach($groupedCities as $city => $city_data)
+                            <li class="d-flex align-items-center gap-2">
+                                @if($city_data['country'] == 'Україна')
+                                <img src="https://img.themesbrand.com/judia/flags/ua.svg" alt="" height="16"  class="rounded-circle object-fit-cover">
+                                @else
+                                    <img src="https://img.themesbrand.com/judia/flags/eu.svg" alt="" height="16"  class="rounded-circle object-fit-cover">
+                                @endif
+                                    <h6 class="flex-grow-1 mb-0">{{ $city }}</h6>
+                                <p class="text-muted mb-0">{{ $city_data['percentage'] }}%</p>
+                            </li>
+                        @endforeach
+
                     </ul>
                 </div>
             </div>

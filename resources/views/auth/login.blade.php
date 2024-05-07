@@ -47,9 +47,9 @@
                                                 &copy;
                                                 <script>
                                                     document.write(new Date().getFullYear())
-                                                </script> Judia. Crafted with <i
-                                                    class="bi bi-heart-fill text-danger"></i> by <a href="#!"
-                                                    class="text-white">Themesbrand</a>
+                                                </script> Світло.  <i
+                                                    class="bi bi-heart-fill text-danger"></i> Моніторинг <a href="#!"
+                                                    class="text-white">наявності світла</a>
                                             </p>
                                         </div>
                                     </div>
@@ -119,7 +119,7 @@
 
                                                 <div class="mt-4 pt-2 text-center">
                                                     <div class="signin-other-title position-relative">
-                                                        <h5 class="fs-sm mb-4 title">Зайти з допомогою</h5>
+                                                        <h5 class="fs-sm mb-4 title">Увійти з допомогою</h5>
                                                     </div>
                                                     @isset ($error)
                                                         <div class="alert alert-danger"> {{ $error }} </div>
@@ -163,5 +163,5 @@
 @endsection
 @section('scripts')
     <!--password addon init js-->
-    <script src="{{ URL::asset('build/js/pages/password-addon.init.js') }}"></script>
+    <script src="{{ URL::asset('/build/js/pages/password-addon.init.js') }}"></script>
 @endsection

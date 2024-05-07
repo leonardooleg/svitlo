@@ -26,7 +26,6 @@ return new class extends Migration
             $table->foreignId('address_id')->index();
             $table->integer('ping')->nullable();
             $table->string('last_activity')->nullable();
-            $table->string('time_check')->nullable();
         });
     }
 

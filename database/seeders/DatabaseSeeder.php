@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Квартира',
             'ip_address' => '192.168.1.1',
             'public' => '1',
-            'link' => 'jhsdAHDI9hasuh',
+            'link' => 'jhsdAHDI9hasu',
         ]);
         Address::create([
             'user_id' => 1,
@@ -39,7 +39,6 @@ class DatabaseSeeder extends Seeder
             'address_id' => 1,
             'ping' => 1,
             'last_activity' => 1713479092,
-            'time_check' => 1713479092,
         ]);
     }
 }

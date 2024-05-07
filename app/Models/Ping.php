@@ -27,7 +27,6 @@ class Ping extends Model
         'address_id',
         'ping',
         'last_activity',
-        'time_check',
     ];
     protected $guarded = [];
 

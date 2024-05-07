@@ -120,5 +120,5 @@
 @endsection
 @section('scripts')
     <!-- password create init js-->
-    <script src="{{ URL::asset('build/js/pages/passowrd-create.init.js') }}"></script>
+    <script src="{{ URL::asset('/build/js/pages/passowrd-create.init.js') }}"></script>
 @endsection

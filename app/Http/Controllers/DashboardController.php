@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Ping;
+use App\Models\User;
 use Carbon\Carbon;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
+
 
 class DashboardController extends Controller
 {
@@ -105,10 +107,10 @@ class DashboardController extends Controller
             $futureTime = $this->futureTime();
 
 
-            $pings[]=['id' => 0, 'address_id' => 0, 'ping' => 1, 'last_activity' => $futureTime[0], 'time_check' => $futureTime[0]];
-            $pings[]=['id' => 1, 'address_id' => 0, 'ping' => 0, 'last_activity' => $futureTime[1], 'time_check' => $futureTime[1]];
-            $pings[]=['id' => 2, 'address_id' => 0, 'ping' => 1, 'last_activity' => $futureTime[2], 'time_check' => $futureTime[2]];
-            $pings[]=['id' => 3, 'address_id' => 0, 'ping' => 0, 'last_activity' => $futureTime[3], 'time_check' => $futureTime[3]];
+            $pings[]=['id' => 0, 'address_id' => 0, 'ping' => 1, 'last_activity' => $futureTime[0]];
+            $pings[]=['id' => 1, 'address_id' => 0, 'ping' => 0, 'last_activity' => $futureTime[1]];
+            $pings[]=['id' => 2, 'address_id' => 0, 'ping' => 1, 'last_activity' => $futureTime[2]];
+            $pings[]=['id' => 3, 'address_id' => 0, 'ping' => 0, 'last_activity' => $futureTime[3]];
         }else{
             $pings = Ping::where('address_id', '=', $address_id)
                 ->whereBetween('last_activity', [strtotime($get_date_now . ' 00:00:00'), strtotime($get_date_now . ' 23:59:59')])
@@ -206,8 +208,121 @@ class DashboardController extends Controller
         // Count the number of pings with a value of 0 in the 'ping' column
         $allPingCountZero = $pings3->where('ping', 0)->count() ?? 0;
 
+        //Віджет по містам
+        $users = User::get()->toArray();
+        // Створимо масив для зберігання згрупованих даних
+        $groupedCities = [];
+        // add demo users to users
+        $demo_users= [
+                [
+                'name' => 'Іван Петренко',
+                'email' => 'ivan.petrenko@example.com',
+                'password' => 'password123',
+                'city' => 'Київ',
+                'country' => 'Україна'
+            ],
+                [
+                'name' => 'Іван Петренко2',
+                'email' => 'ivan.petrenko2@example.com',
+                'password' => 'password123',
+                'city' => 'Київ',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Анна Сидоренко',
+                'email' => 'anna.sidorenko@example.com',
+                'password' => 'password456',
+                'city' => 'Львів',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Олександр Шевченко',
+                'email' => 'oleksandr.shevchenko@example.com',
+                'password' => 'password789',
+                'city' => 'Одеса',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Jean Dupont',
+                'email' => 'jean.dupont@example.com',
+                'password' => 'password000',
+                'city' => 'Paris',
+                'country' => 'Франція'
+            ],
+            [
+                'name' => 'Jean Dupont2',
+                'email' => 'jean.dupon2t@example.com',
+                'password' => 'password000',
+                'city' => 'Одеса',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Marie Dubois',
+                'email' => 'marie.dubois@example.com',
+                'password' => 'password111',
+                'city' => 'Харків',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Pierre Martin',
+                'email' => 'pierre.martin@example.com',
+                'password' => 'password222',
+                'city' => 'Харків',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Pierre Martin2',
+                'email' => 'pierre.martin2@example.com',
+                'password' => 'password222',
+                'city' => 'Харків',
+                'country' => 'Україна'
+            ],
+            [
+                'name' => 'Pierre Martin3',
+                'email' => 'pierre.martin3@example.com',
+                'password' => 'password222',
+                'city' => 'Харків',
+                'country' => 'Україна'
+            ],
+        ];
+        $users = array_merge($users, $demo_users);
 
-        return view('dashboard', [ 'name' => $addresses['name'], 'address_id' => $address_id, 'pings' => $pings, 'lists' => $lists, 'date_select' => $date_select, 'pingCountZero' => $pingCountZero, 'allPingCountZero' => $allPingCountZero]);
+        // Пройдемося по масиві користувачів
+        foreach ($users as $user) {
+            if ($user["city"] == null) {
+                $city = 'Не вказано';
+            }else{
+                $city = $user['city'];
+            }
+
+            $country = $user['country'];
+
+            // Перевіримо, чи вже є таке місто в масиві $groupedCities
+            if (!isset($groupedCities[$city])) {
+                $groupedCities[$city] = [
+                    'count' => 0,
+                    'country' => $country,
+                    'percentage' => 0
+                ];
+            }
+
+            // Збільшимо лічильник для міста
+            $groupedCities[$city]['count']++;
+        }
+
+        // Розрахуємо відсоток для кожного міста
+        $totalUsers = count($users);
+        foreach ($groupedCities as $city => &$cityData) {
+            $cityData['percentage'] = round(($cityData['count'] / $totalUsers) * 100, 2);
+        }
+        uasort($groupedCities, function ($a, $b) {
+            return $b['percentage'] - $a['percentage'];
+        });
+
+        //Всі відключення
+        $pingController = new PingController();
+        $pingStats = $pingController->pingStats();
+        return view('dashboard', [ 'name' => $addresses['name'], 'address_id' => $address_id, 'pings' => $pings, 'lists' => $lists, 'date_select' => $date_select, 'pingCountZero' => $pingCountZero, 'allPingCountZero' => $allPingCountZero, 'groupedCities' => $groupedCities, 'pingStats' => $pingStats]);
 
     }
 
