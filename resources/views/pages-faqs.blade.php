@@ -12,7 +12,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-xl-4">
-                <h5 class="card-title mb-3">Загольні питання</h5>
+                <h5 class="card-title mb-3">Загальні питання</h5>
                 <p class="text-muted">Відповіді на загальні питання по роботі сайту і як користуватись інтерфейсом для моніторингу наявності світла.</p>
             </div>
             <!--end col-->
@@ -31,7 +31,7 @@
                             <div class="accordion-body">
                                 Після реєстрації Ви в  <a href="/profile">Особистому кабінеті</a> в розділі "Мої будинки" зможете додати свої інтернет адреси для відстеження.
                                 Далі сайт буде моніторити їх кожні 3 хвилини і збирати статистику про їх статус. Якщо статус змінився Ви можете підписатись на оновлення через
-                                Telegram бота чи сповіщення на вашу емейл адресу.
+                                Telegram бота чи сповіщення на вашу email адресу.
                             </div>
                         </div>
                     </div>
@@ -157,6 +157,47 @@ if (is_string($response)) {
                         </div>
                     </div>
 
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="info-PHP">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#genques-collapseFour6" aria-expanded="false"
+                                    aria-controls="genques-collapseFour6">
+                                Як відправляти самому запити для моніторингу PHP скриптом?
+                            </button>
+                        </h2>
+                        <div id="genques-collapseFour6" class="accordion-collapse collapse"
+                             aria-labelledby="info-PHP" data-bs-parent="#genques-accordion">
+                            <div class="accordion-body">
+                                <pre class="language-markup">
+                                        <code class="language-markup">
+function curlGetHttps($url) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    curl_close($ch);
+    if ($error) {
+        return "Error: " . $error;
+    } else {
+        return $response;
+    }
+}
+// Приклад визову функції
+$url = "ВАШЕ ПОСИЛАННЯ"; // Замінити на своє посилання URL для потрібного будинку
+$response = curlGetHttps($url);
+if (is_string($response)) {
+    echo "Response:\n" . $response;
+} else {
+    echo "Error: Could not get response.";
+}
+
+                                    </code>
+                                 </pre>
+                            </div>
+                        </div>
+                    </div>
                 <!--end accordion-->
             </div>
         </div>
