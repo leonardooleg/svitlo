@@ -588,46 +588,64 @@
     <script src="{{ URL::asset('/build/js/uk.js') }}"></script>
 
     <script>
+        // Initialize flatpickr with Ukrainian localization
         flatpickr.localize(flatpickr.l10ns.uk);
-        flatpickr(".flatpickr-calendar",{
+
+        // Set ariaDateFormat for flatpickr calendar
+        flatpickr(".flatpickr-calendar", {
             ariaDateFormat: "d.m.Y",
         });
 
+        // Define the handleDayClick function
+        const handleDayClick = (event) => {
+            const clickedElement = event.target;
+            if (!clickedElement.classList.contains('flatpickr-day') || clickedElement.classList.contains('flatpickr-disabled')) {
+                return; // Exit if not a valid date element
+            }
+
+            const selectedDateLabel = clickedElement.getAttribute('aria-label');
+            const selectedDate = selectedDateLabel; // Assuming DD.MM.YYYY format
+
+            // Get the current URL
+            const currentURL = window.location.href;
+
+            // Check if selected date is already present as a parameter
+            const dateParamRegex = /\/(\d{2}\.\d{2}\.\d{4})/g; // Regex to match date parameter
+            const existingDateMatches = currentURL.match(dateParamRegex);
+            if (existingDateMatches) {
+                // Replace existing date parameter with selected date
+                const modifiedURL = currentURL.replace(dateParamRegex, `/${selectedDate}`);
+                window.location.href = modifiedURL;
+            } else {
+                // Append selected date to URL if not already present
+                const modifiedURL = `${currentURL}/${selectedDate}`;
+                window.location.href = modifiedURL;
+            }
+        };
+
+        // Function to check for and attach event listener to dayContainer
+        const checkDayContainer = () => {
+            const dayContainer = document.querySelector('.dayContainer');
+            if (dayContainer) {
+                dayContainer.addEventListener('click', handleDayClick);
+            }
+        };
+
+
+        // Set up interval to check for dayContainer every 2 seconds
+        const intervalId = setInterval(checkDayContainer, 1000);
+
+        // Create a MutationObserver to observe changes to the document body
         const mutationObserver = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                    const dayContainer = document.querySelector('.dayContainer');
-                    if (dayContainer) {
-                        dayContainer.addEventListener('click', (event) => {
-                            const clickedElement = event.target;
-
-                            // Check if clicked element is a non-disabled date
-                            if (clickedElement.classList.contains('flatpickr-day') && !clickedElement.classList.contains('flatpickr-disabled')) {
-                                const selectedDateLabel = clickedElement.getAttribute('aria-label');
-                                const selectedDate = selectedDateLabel; // Assuming date format is already DD.MM.YYYY
-
-                                // Get current URL
-                                const currentURL = window.location.href;
-                                // Check if selected date is already present as a parameter
-                                const dateParamRegex = /\/(\d{2}\.\d{2}\.\d{4})/g; // Regex to match date parameter
-                                const existingDateMatches = currentURL.match(dateParamRegex);
-                                if (existingDateMatches) {
-                                    // Replace existing date parameter with selected date
-                                    const modifiedURL = currentURL.replace(dateParamRegex, `/${selectedDate}`);
-                                    window.location.href = modifiedURL;
-                                } else {
-                                    // Append selected date to URL if not already present
-                                    const modifiedURL = `${currentURL}/${selectedDate}`;
-                                    window.location.href = modifiedURL;
-                                }
-                            }
-                        });
-                        mutationObserver.disconnect(); // Stop observing after the element is found
-                    }
+                    checkDayContainer(); // Check for dayContainer after any child changes
+                    mutationObserver.disconnect(); // Stop observing after first find
                 }
             }
         });
 
+        // Start observing the document body for childList changes
         mutationObserver.observe(document.body, { childList: true });
 
 
