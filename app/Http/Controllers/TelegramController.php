@@ -70,9 +70,10 @@ class TelegramController extends Controller
         if (isset($user)) {
           //update user telegram_id
             $user->telegram_id = $chatId;
+            $user->notification = 'telegram';
             $user->save();
 
-            $this->sendMessage($chatId, "Ваша Telegram ID: {$chatId} збережений для електронної пошти : {$text}. Дякуємо!");
+            $this->sendMessage($chatId, "Ваша Telegram ID: {$chatId} збережений для електронної пошти: {$text}. Дякуємо!");
         }else{
             $this->sendMessage($chatId, "Такого користувача не знайдено.");
         }
@@ -83,8 +84,8 @@ class TelegramController extends Controller
         // Implement logic to receive email address and save it to the database
         // For example, using a keyboard with an input field
         $user = User::where('telegram_id', $chatId)->first();
-        $email = $user->email;
         if (isset($user)) {
+            $email = $user->email;
           //update user telegram_id
             $user->telegram_id = $chatId;
             $user->notification = 'telegram';

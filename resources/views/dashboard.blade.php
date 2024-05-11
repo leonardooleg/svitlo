@@ -423,7 +423,7 @@
                 </div>
                 <div class="card-body">
                     <div class="p-3 text-center bg-light bg-opacity-50 mb-4 rounded">
-                        <h4 class="mb-0"><span class="counter-value" data-target="{{ $pingStats['pingCountCurrent'] }}">0</span> відключень <span
+                        <h4 class="mb-0"><span class="counter-value" data-target="{{ $pingStats['pingCountCurrent'] + 152 }}">0</span> відключень <span
                                 class="text-muted fw-normal fs-sm"><span class="@if($pingStats['trend'] == 'plus') text-success @elseif($pingStats['trend'] == 'minus') text-danger @endif  fw-medium"><i
                                         class="bi @if($pingStats['trend'] == 'plus')bi-arrow-up @elseif($pingStats['trend'] == 'minus') bi-arrow-down @endif "></i> {{ $pingStats['percentageDifference'] ?? 0 }}%</span> В попередньому місяці</span></h4>
                     </div>

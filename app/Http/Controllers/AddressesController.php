@@ -107,11 +107,12 @@ class AddressesController extends Controller
                     'address_id' => $id_address->id,
                     'ping' => 1,
                     'last_activity' => $now_time,
+                    'last_status' => $now_time,
                 ]);
             }else{
                 // оновити запис Ping
                 $last_ping->update([
-                    'last_activity' => $now_time
+                    'last_status' => $now_time
                 ]);
             }
         } else {
@@ -121,6 +122,7 @@ class AddressesController extends Controller
                 'address_id' => $id_address->id,
                 'ping' => 1,
                 'last_activity' => $now_time,
+                'last_status' => $now_time,
             ]);
         }
         // Store request timestamp in cache with desired throttle period

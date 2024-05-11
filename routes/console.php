@@ -71,6 +71,7 @@ Schedule::call(function () {
                     'address_id' => $one_address['id'],
                     'ping' => $latency,
                     'last_activity' => $now_time,
+                    'last_status' => $now_time,
                 ]);
                 $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], $status);
             }
@@ -81,6 +82,7 @@ Schedule::call(function () {
                 'address_id' => $one_address['id'],
                 'ping' => $latency,
                 'last_activity' => $now_time,
+                'last_status' => $now_time,
             ]);
             $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], 'Онлайн');
         }
@@ -96,7 +98,7 @@ Schedule::call(function () {
         $status=false;
         $now_time = time();
         if ($url_pings->count() > 0) {
-            $last_ping = $url_pings->latest('last_activity')->first();
+            $last_ping = $url_pings->latest('last_status')->first();
             $now_date= (int)strtotime("-7 minutes");
             $status_date=(int)$last_ping->last_activity;
             if($now_date>$status_date){
@@ -106,6 +108,7 @@ Schedule::call(function () {
                         'address_id' => $url_address['id'],
                         'ping' => 0,
                         'last_activity' => $now_time,
+                        'last_status' => $now_time,
                     ]);
                     print 'Дім '.$url_address['name'].'  - Застарів.';
                     $notificationHelper->push_notification($url_address['user_id'], $url_address['name'], 'Офлайн');
