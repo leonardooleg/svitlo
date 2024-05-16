@@ -1,3 +1,4 @@
+@php use App\Models\Address; @endphp
 <div class="menu-wrapper">
     <header id="page-topbar">
         <div class="layout-width">
@@ -78,29 +79,39 @@
                             <li class="menu-title"><span data-key="t-menu">Меню</span></li>
                             <li class="nav-item">
                                 <a href="/" class="nav-link menu-link">
-                                    <i class="ph-house"></i> <span>Головна</span>
+                                    <i class="ph-gauge"></i> <span>Панель</span>
                                 </a>
                             </li>
 
 
-                            <?php
-                            $address_id = $address_id ?? 1;
-                            ?>
-                            @if(Auth::check())
-                                <li class="nav-item">
-                                    <a href="/dashboard" class="nav-link menu-link">
-                                        <i class="ph-gauge"></i> <span>Панель відстеження</span>
-                                    </a>
-                                </li>
-                                @foreach(\App\Models\Address::where('user_id', Auth::user()->id)->get() as $address)
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-link @if($address->id == $address_id ) active @endif" href="{{ route('dashboard') }}/{{ $address->id }}">
-                                            <i class="ph-map-pin"></i> <span>{{ $address->name }}</span>
-                                        </a>
-                                    </li>
-                                @endforeach
 
-                            @endif
+                                <?php
+                                if (!isset($addresses)) {
+                                    if (auth()->check()) {
+                                        $addresses = Address::where('user_id', auth()->user()->id)->get();
+                                    }
+                                }
+                                if (!isset($address_id)) {
+                                        $address_id = false;
+                                    }
+                                if (!isset($user_url)) {
+                                    if (auth()->check()) {
+                                        $user_url = auth()->user()->user_url;
+                                    }
+
+                                }
+                                ?>
+                                @if(isset($addresses))
+
+                                    @foreach($addresses as $one_address)
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link @if($one_address->id == $address_id ) active @endif" href="/dashboard/{{ $user_url }}/{{ $one_address->id }}">
+                                                <i class="ph-map-pin"></i> <span>{{ $one_address->name }}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                 @endif
+
 
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/faqs"><i class="ph-info"></i> <span>Довідка</span></a>

@@ -16,9 +16,37 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($user_url)
     {
-        return redirect('/dashboard/1',301);
+        //ad first user id address
+        $user = User::where('user_url', $user_url)->first();
+        if($user){
+            $public_address = (int)$user->public_address;
+            if (isset($public_address) && $public_address ==1 || auth()->check() && auth()->user()->id == $user->id){
+                $address = Address::where('user_id', $user->id)->first();
+                if($address){
+                    return redirect('/dashboard/'.$user->user_url.'/'.$address['id'],301);
+                }
+            }
+
+        }
+        return redirect('/',301);
+    }
+    public function dashboard()
+    {
+        //ad first user id address
+
+        if(auth()->check()){
+            $public_address = (int)auth()->user()->public_address;
+            if (isset($public_address) && $public_address ==1 || auth()->check() && auth()->user()->id == auth()->user()->id){
+                $address = Address::where('user_id', auth()->user()->id)->first();
+                if($address){
+                    return redirect('/dashboard/'.auth()->user()->user_url.'/'.$address['id'],301);
+                }
+            }
+
+        }
+        return redirect('/',301);
     }
 
     /**
@@ -31,17 +59,18 @@ class DashboardController extends Controller
             if (strlen($link_address)==13){
                 $address = Address::where('link', $link_address)->first();
                 if ($address){
-                    return $this->show($address['id'], $date_select, true);
+                    return $this->show(false, $address['id'], $date_select, true);
                 }
             }
         }
 
         return redirect('/',301);
     }
+
     public function user_demo()
     {
 
-        return $this->show(false,null,false, true);
+        return $this->show(false,false,null,false, true);
 
     }
 
@@ -64,22 +93,40 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $address_id, string $date_select = null, bool $link = false, bool $demo = false)
+    public function show(string $user_url, int $address_id, string $date_select = null, bool $link = false, bool $demo = false)
     {
-
+        $addresses=[];
         if ($link) {
-            $addresses = Address::where('id', $address_id)->first();
-            if ($addresses == null) {
+            $address = Address::where('id', $address_id)->first();
+            if ($address == null) {
                 return redirect('/', 301);
             }
-        }else if($demo){
-            $address_id=0;
-            $addresses['name'] = 'Demo';
         }else{
-            $addresses = Address::where('user_id', auth()->user()->id)->where('id', $address_id)->first();
-            if ($addresses == null) {
-                return redirect('/profile', 301);
+            if ($user_url){
+                $user = User::where('user_url', $user_url)->first();
+            }else{
+                $user = auth()->user();
             }
+            if($demo) {
+                $address_id = 0;
+                $address['name'] = 'Demo';
+            }
+            if($user) {
+                $public_address = (int)$user->public_address;
+                if (isset($public_address) && $public_address ==1 || auth()->check() && auth()->user()->id == $user->id){
+                    if(!$demo) {
+                        $address = false;
+                        $address = Address::where('user_id', $user->id)->where('id', $address_id)->first();
+                    }
+                    if (!$user_url){
+                        $user_url = $user->user_url;
+                    }
+                    $addresses = Address::where('user_id', $user->id)->get();
+                }else{
+                    return redirect('/', 301);
+                }
+            }
+
         }
 
         //якщо є конкретна дата запросу
@@ -322,7 +369,7 @@ class DashboardController extends Controller
         //Всі відключення
         $pingController = new PingController();
         $pingStats = $pingController->pingStats();
-        return view('dashboard', [ 'name' => $addresses['name'], 'address_id' => $address_id, 'pings' => $pings, 'lists' => $lists, 'date_select' => $date_select, 'pingCountZero' => $pingCountZero, 'allPingCountZero' => $allPingCountZero, 'groupedCities' => $groupedCities, 'pingStats' => $pingStats]);
+        return view('dashboard', [ 'name' => $address['name'], 'user_url' => $user_url, 'address_id' => $address_id, 'pings' => $pings, 'lists' => $lists, 'date_select' => $date_select, 'pingCountZero' => $pingCountZero, 'allPingCountZero' => $allPingCountZero, 'groupedCities' => $groupedCities, 'pingStats' => $pingStats, 'addresses' => $addresses]);
 
     }
 

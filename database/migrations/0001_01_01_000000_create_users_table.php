@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('provider_token')->nullable();
             $table->string('notification')->nullable();
             $table->string('telegram_id')->nullable();
+            $table->string('user_url')->nullable();
+            $table->string('public_address')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Hash;
 
 class NotificationNewUser
 {
@@ -26,7 +27,8 @@ class NotificationNewUser
 
         $user = $event->user;
         $userName = $user->name;
-
+        $this->telegram_notification($userName);
+        // Send a message to telegram
         $token = config('services.telegram.token');
         $apiUrl = 'https://api.telegram.org/bot' .$token . '/';
 

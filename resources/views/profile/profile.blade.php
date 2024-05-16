@@ -40,11 +40,11 @@
                     <div class="col-sm-auto mb-3">
                         <div class="hstack gap-2">
                             <button class="btn btn-subtle-success">Онлайн</button>
-                            <button type="button" class="btn btn-outline-secondary custom-toggle active"
-                                    data-bs-toggle="button" aria-pressed="false">
-                                <span class="icon-on"><i class="ri-add-line align-bottom me-1"></i> Слідкувати</span>
-                                <span class="icon-off"><i class="ri-user-unfollow-line align-bottom me-1"></i>
-                                Відписатись</span>
+                            <button type="button" class="btn btn-outline-secondary custom-toggle public_user @if(Auth::user()->public_address == 1) active @endif"  data-bs-toggle="button" @if(Auth::user()->public_address == 1) aria-pressed="true" @else aria-pressed="false" @endif>
+                                <span class="icon-off">
+                                    <i class="ri-team-line align-bottom me-1">@if(Auth::user()->public_address === 1)<::before></::before>@endif</i> Публічний</span>
+                                <span class="icon-on">
+                                    <i class="ri-user-unfollow-line align-bottom me-1">@if(Auth::user()->public_address === 0)<::before></::before>@endif</i>Приватний</span>
                             </button>
                         </div>
                     </div>
@@ -112,13 +112,13 @@
                                         </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
-                                        @if (isset($addresses))
-                                            @foreach ($addresses as $address)
-                                                <tr id="parentDiv" data-address-id="{{ $address['address']['id'] }}"
-                                                @if ($address['address']['ip_address'])
-                                                        data-address-ip="{{ $address['address']['ip_address'] }}"
-                                                @elseif($address['address']['url_address'])
-                                                        data-address-url="{{ $address['address']['url_address'] }}"
+                                        @if (isset($addressesWithPings))
+                                            @foreach ($addressesWithPings as $addressWithPings)
+                                                <tr id="parentDiv" data-address-id="{{ $addressWithPings['address']['id'] }}"
+                                                @if ($addressWithPings['address']['ip_address'])
+                                                        data-address-ip="{{ $addressWithPings['address']['ip_address'] }}"
+                                                @elseif($addressWithPings['address']['url_address'])
+                                                        data-address-url="{{ $addressWithPings['address']['url_address'] }}"
                                                 @endif
                                                 >
                                                     <td>
@@ -132,28 +132,28 @@
                                                     <td class="name">
                                                         <div class="d-flex align-items-center gap-2">
                                                             <a href="#showModal" class="text-reset" data-bs-toggle="modal">
-                                                                <h6 class="mb-0 flex-grow-1 text-reset contactname"> {{ $address['address']['name'] }}</h6>
+                                                                <h6 class="mb-0 flex-grow-1 text-reset contactname"> {{ $addressWithPings['address']['name'] }}</h6>
                                                             </a>
                                                         </div>
                                                     </td>
 
                                                     <td class="membership">
-                                                        @if ($address['ping'] === 1)
+                                                        @if ($addressWithPings['ping'] === 1)
                                                             <span class="badge bg-warning">Онлайн</span>
                                                         @else
                                                             <span class="badge bg-danger">Офлайн </span>
                                                         @endif
                                                     <td class="date">
-                                                        @if ($address['minutesAgo'] >= 1)
-                                                            {{ $address['minutesAgo'] }} хв. назад
+                                                        @if ($addressWithPings['minutesAgo'] >= 1)
+                                                            {{ $addressWithPings['minutesAgo'] }} хв. назад
                                                         @else
                                                             немає даних
                                                         @endif
                                                     </td>
                                                     <td class="membership address_public">
-                                                            @if ($address['address']['public'] === 1)
+                                                            @if ($addressWithPings['address']['public'] === 1)
                                                                 <span class="badge bg-success address_public_status">Публічна</span>
-                                                                <span class="address_link d-none" >{{$address['address']['link']}}</span>
+                                                                <span class="address_link d-none" >{{$addressWithPings['address']['link']}}</span>
                                                             @else
                                                                 <span class="badge bg-info address_public_status">Приватна </span>
                                                             @endif
@@ -585,6 +585,49 @@
                 var tableResponsive = document.querySelector('.table-responsive');
                 tableResponsive.style.overflowX = 'auto';
             }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const toggleButton = document.querySelector('.public_user');
+
+
+            toggleButton.addEventListener('click', function() {
+
+
+                function checkActiveClass() {
+                    const button = document.querySelector('.btn.btn-outline-secondary.custom-toggle.public_user.active');
+                    if (button) {
+                        return 1; // Клас "active" існує, повертаємо 1
+                    } else {
+                        return 0; // Клас "active" не існує, повертаємо 0
+                    }
+                }
+
+                // Приклад використання
+                const activeStatus = checkActiveClass();
+                console.log(activeStatus); // Виводить 1 або 0, залежно від наявності класу "active"
+
+
+
+
+                // Відправити POST запит до Laravel 11
+                fetch('/profile/public', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        status: activeStatus
+                    })
+                })
+
+                    .catch(error => {
+                        console.error('Помилка при надсиланні запиту:', error);
+                    });
+            });
         });
     </script>
 @endsection

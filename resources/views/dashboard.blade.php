@@ -274,6 +274,7 @@
                         <div class=" mg-b-30 res-mg-t-30">
 
 
+
                             <div class="line">
                                 <?php
 
@@ -328,25 +329,6 @@
                             </div>
                         </div>
 
-                    <?php
-                        function convertMinutesToHoursAndMinutes($minutes) {
-                            // Check if minutes is a number
-                            if (!is_numeric($minutes)) {
-                                throw new Exception('Invalid input: minutes must be a number');
-                            }
-
-                            // Convert minutes to hours and minutes
-                            $hours = floor($minutes / 60);
-                            $remainingMinutes = $minutes % 60;
-
-                            // Format the output
-                            if ($hours === 0) {
-                                return $remainingMinutes . "0."; // If no hours, just show minutes
-                            } else {
-                                return $hours . "." . $remainingMinutes . ""; // Otherwise, show hours and minutes
-                            }
-                        }
-                    ?>
 
 
                     <div class="row mt-3 g-3">
@@ -358,9 +340,29 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <h5 class="fs-lg"><span class="counter-value" data-target="<?=convertMinutesToHoursAndMinutes($day_minutes)?>"></span> <span
+                                        <?php
+
+                                            if (!is_numeric($day_minutes)) {
+                                                throw new Exception('Invalid input: minutes must be a number');
+                                            }
+
+                                            // Convert minutes to hours and minutes
+                                            $hours = floor($day_minutes / 60);
+                                            $remainingMinutes = $day_minutes % 60;
+
+                                            // Format the output
+                                            if ($hours === 0) {
+                                                $minutes = $remainingMinutes . "0."; // If no hours, just show minutes
+                                            } else {
+                                                $minutes =  $hours . "." . $remainingMinutes . ""; // Otherwise, show hours and minutes
+                                            }
+
+                                        ?>
+
+
+                                    <h5 class="fs-lg"><span class="counter-value" data-target="<?=$minutes?>"></span> <span
                                             class="fs-xs text-success ms-1"><i class="ph ph-trend-up align-middle me-1"></i>
-                                        <?=($day_minutes / $all_day_minutes) * 100?>%</span></h5>
+                                        <?=number_format(($day_minutes / $all_day_minutes) * 100, 2) ?>%</span></h5>
                                     <p class="text-muted mb-0">Сьогодні не було світла (год.)</p>
                                 </div>
                             </div>

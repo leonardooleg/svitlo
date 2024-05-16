@@ -51,7 +51,8 @@ class ProfileController extends Controller
 
         return view('profile.profile', [
             'user' => $request->user(),
-            'addresses' => $addressesWithPings,
+            'addressesWithPings' => $addressesWithPings,
+            'addresses' => $addresses,
         ]);
     }
 
@@ -126,6 +127,13 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $user->theme = $request->input('theme');
+        $user->save();
+        return Redirect::route('dashboard');
+    }
+    public function public(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $user->public_address = $request->input('status');
         $user->save();
         return Redirect::route('dashboard');
     }

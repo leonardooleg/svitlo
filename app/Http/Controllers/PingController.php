@@ -44,10 +44,10 @@ class PingController extends Controller
             $percentageDifference = $percentageCurrent - $percentagePrevious;
             $trend = ($percentageDifference > 0) ? 'plus' : 'minus';
         }
-        if ($totalPingsPrevious && $percentageDifference > 0) {
+        if ($totalPingsPrevious && is_numeric($percentageDifference)) {
             $numberString = strval($percentageDifference);
             $parts = explode('.', $numberString);
-            if(count($parts) > 2) {
+            if(count($parts) >= 2) {
                 $firstDigitAfterDecimal = $parts[1][0];
                 $percentageDifference = $parts[0] . '.' . $firstDigitAfterDecimal;
             }

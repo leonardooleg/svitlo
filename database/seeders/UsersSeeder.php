@@ -17,45 +17,10 @@ class UsersSeeder extends Seeder
         $users = [
             [
                 'name' => 'Іван Петренко',
-                'email' => 'ivan.petrenko@example.com',
-                'password' => bcrypt('password123'),
-                'city' => 'Київ',
+                'email' => 'leonardooleg2@gmail.com',
+                'password' => bcrypt('password'),
+                'city' => 'Полтава',
                 'country' => 'Україна'
-            ],
-            [
-                'name' => 'Анна Сидоренко',
-                'email' => 'anna.sidorenko@example.com',
-                'password' => bcrypt('password456'),
-                'city' => 'Львів',
-                'country' => 'Україна'
-            ],
-            [
-                'name' => 'Олександр Шевченко',
-                'email' => 'oleksandr.shevchenko@example.com',
-                'password' => bcrypt('password789'),
-                'city' => 'Одеса',
-                'country' => 'Україна'
-            ],
-            [
-                'name' => 'Jean Dupont',
-                'email' => 'jean.dupont@example.com',
-                'password' => bcrypt('password000'),
-                'city' => 'Paris',
-                'country' => 'Франція'
-            ],
-            [
-                'name' => 'Marie Dubois',
-                'email' => 'marie.dubois@example.com',
-                'password' => bcrypt('password111'),
-                'city' => 'Marseille',
-                'country' => 'Франція'
-            ],
-            [
-                'name' => 'Pierre Martin',
-                'email' => 'pierre.martin@example.com',
-                'password' => bcrypt('password222'),
-                'city' => 'Lyon',
-                'country' => 'Франція'
             ],
             // Add more users with different cities in Ukraine and France
         ];
