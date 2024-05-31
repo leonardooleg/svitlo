@@ -248,7 +248,7 @@
                         <div class="card-body">
                             <p class="mb-0">Метою сайту є моніторинг наявності світла вдома чи підприємства та зберігання даних для подальшого аналізу використовуючи ваш IP адрес чи запустивши простий скрипт для моніторингу.</p>
                             <p class="mb-0">Сайт максимально спрощено для зручності користування сервісом з мінімальними навичками. </p>
-                            <p class="mb-0">В розіді <a href="/faqs" class="text-decoration-underline">"Довідка"</a> ви знайдете, як користуватися сервісом зручним для вас методом. </p>
+                            <p class="mb-0">В розділі <a href="/faqs" class="text-decoration-underline">"Довідка"</a> ви знайдете, як користуватися сервісом зручним для вас методом. </p>
                         </div>
                         <!--end card-body-->
                     </div>
@@ -262,9 +262,9 @@
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header d-flex align-items-center flex-wrap gap-3">
-                    <h5 class="card-title mb-0 flex-grow-1">Графік наявності світла @if (Route::currentRouteName() === 'welcome') <span style="font-size: small">(Домонстративні дані) </span>@endif</h5>
+                    <h5 class="card-title mb-0 flex-grow-1">Графік наявності світла @if (Route::currentRouteName() === 'welcome') <span style="font-size: small">(Демонстративні дані) </span>@endif</h5>
                     <div class="flex-shrink-0">
-                        <input class="form-control form-control-sm flatpickr flatpickr-input" data-aria-date-format="d.m.Y"  data-alt-format="d.m.Y" data-date-format="d.m.Y" @if (Route::currentRouteName() === 'welcome') data-min-date="<?=date('d.m.Y')?>"  @endif data-max-date="<?=date('d.m.Y')?>"  data-provider="flatpickr" type="text" placeholder="<?php if(isset($date_select)){ echo $date_select; }else{ echo    date('d.m.Y'); }?>" readonly="readonly">
+                        <input class="form-control form-control-sm flatpickr flatpickr-input" data-aria-date-format="d.m.Y"  data-alt-format="d.m.Y" data-date-format="d.m.Y" @if (Route::currentRouteName() === 'welcome') data-min-date="<?=date('d.m.Y')?>"  @endif data-max-date="<?=date('d.m.Y')?>"  data-provider="flatpickr" type="text" value="<?php if(isset($date_select)){ echo $date_select; }else{ echo    date('d.m.Y'); }?>" readonly="readonly">
                     </div>
                 </div>
                 <!--end card-header-->
@@ -598,108 +598,27 @@
             ariaDateFormat: "d.m.Y",
         });
 
-        // Define the handleDayClick function
-        const handleDayClick = (event) => {
-            const clickedElement = event.target;
-            if (!clickedElement.classList.contains('flatpickr-day') || clickedElement.classList.contains('flatpickr-disabled')) {
-                return; // Exit if not a valid date element
-            }
+        const inputField = document.querySelector('.form-control.form-control-sm.flatpickr.flatpickr-input');
 
-            const selectedDateLabel = clickedElement.getAttribute('aria-label');
-            const selectedDate = selectedDateLabel; // Assuming DD.MM.YYYY format
-
-            // Get the current URL
+        inputField.addEventListener('change', function() {
+            const newValue = this.value;
             const currentURL = window.location.href;
+            let updatedURL;
 
-            // Check if selected date is already present as a parameter
-            const dateParamRegex = /\/(\d{2}\.\d{2}\.\d{4})/g; // Regex to match date parameter
-            const existingDateMatches = currentURL.match(dateParamRegex);
-            if (existingDateMatches) {
-                // Replace existing date parameter with selected date
-                const modifiedURL = currentURL.replace(dateParamRegex, `/${selectedDate}`);
-                window.location.href = modifiedURL;
+            // Перевірка наявності дати в URL
+            const urlParts = currentURL.split('/');
+            const hasDate = urlParts.length > 6 && !isNaN(parseInt(urlParts[urlParts.length - 1]));
+
+            if (hasDate) {
+                // URL містить дату, оновити лише останню частину
+                updatedURL = urlParts.slice(0, -1).join('/') + '/' + newValue;
             } else {
-                // Append selected date to URL if not already present
-                const modifiedURL = `${currentURL}/${selectedDate}`;
-                window.location.href = modifiedURL;
+                // URL не містить дати, додати дату до кінця
+                updatedURL = currentURL + '/' + newValue;
             }
-        };
 
-        // Function to check for and attach event listener to dayContainer
-        const checkDayContainer = () => {
-            const dayContainer = document.querySelector('.dayContainer');
-            if (dayContainer) {
-                dayContainer.addEventListener('click', handleDayClick);
-            }
-        };
-
-
-        // Set up interval to check for dayContainer every 2 seconds
-        const intervalId = setInterval(checkDayContainer, 1000);
-
-        // Create a MutationObserver to observe changes to the document body
-        const mutationObserver = new MutationObserver((mutations) => {
-            for (const mutation of mutations) {
-                if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                    checkDayContainer(); // Check for dayContainer after any child changes
-                    mutationObserver.disconnect(); // Stop observing after first find
-                }
-            }
+            window.location.href = updatedURL;
         });
-
-        // Start observing the document body for childList changes
-        mutationObserver.observe(document.body, { childList: true });
-
-
-
-        // Function to update "now" class
-
-            // Get current URL
-        function updateNowClassOnDOMReady() {
-            // Check if date parameter is present in the URL (optional)
-            const currentURL = window.location.href;
-            const dateParamRegex = /\/(\d{2}\.\d{2}\.\d{4})/g; // Regex to match date parameter
-            const existingDateMatches  = currentURL.match(dateParamRegex);
-
-            // Function to update "now" class
-            function updateNowClass(selectedDate = null) {
-                if (existingDateMatches) {
-                    // Extract current date from URL
-                    const currentDate = existingDateMatches[0].replace("/", "")
-                    // Find the record with the matching date
-                    const matchingRecord = document.querySelector(`.dayContainer .flatpickr-day[aria-label="` + currentDate + `"]`);
-                    if (matchingRecord) {
-                        // Add "now" class to the matching record
-                        matchingRecord.classList.add('now');
-
-                        // Remove "now" class from any previously selected record
-                        if (selectedDate && selectedDate !== currentDate) {
-                            const previouslySelectedRecord = document.querySelector(`.dayContainer .flatpickr-day[aria-label="` + selectedDate + `"]`);
-                            if (previouslySelectedRecord) {
-                                previouslySelectedRecord.classList.remove('now');
-                            }
-                        }
-                    }
-                } else {
-                    // No date parameter in URL, potentially handle initial selection
-                    // (Add logic here if needed, e.g., based on a default date)
-                }
-            }
-
-            // Call updateNowClass after the DOM is ready
-            window.addEventListener('DOMContentLoaded', () => {
-                // Check if flatpickr-input exists
-                const flatpickrInput = document.querySelector('.flatpickr-input');
-                if (flatpickrInput) {
-                    flatpickrInput.addEventListener('click', () => {
-                        updateNowClass(); // Update "now" class after clicking flatpickr-input
-                    });
-                }
-            });
-        }
-
-        // Call the function
-        updateNowClassOnDOMReady();
 
 
 

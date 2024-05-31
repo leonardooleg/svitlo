@@ -18,15 +18,16 @@ Artisan::command('inspire', function () {
 
 
 
-Schedule::call(function () {
+
     $notificationHelper = new NotificationHelper();
 
     $ip_address = \App\Models\Address::whereNotNull('ip_address')->get();
     foreach ($ip_address as $one_address) {
+
         //get ping
         $maxAttempts = 3;  // Максимальна кількість спроб ping
         $timeout = 90;      // Таймаут очікування (мс)
-        $sleepTime = 20;     // Час затримки між спробами (мс)
+
 
         $latency = 0;
         $host = $one_address['ip_address'];
@@ -40,32 +41,35 @@ Schedule::call(function () {
             try {
                 $latency = $ping->ping();  // Вказати таймаут при виклику ping
             } catch (\Exception $e) {
-                echo 'Помилка ping (' . $attempt . ' спроба): ' . $e->getMessage() . '<br>';
+                echo 'Помилка ping (' . $attempt . ' спроба): ' . $e->getMessage() . " <br> \n";
             }
 
             if (!$latency && $attempt < $maxAttempts) {
-                sleep($sleepTime / 1000); // Затримка в секундах
+                sleep(1); // Затримка в секундах
             }
         }
 
-        $message = $latency !== 0
+        $message = $latency != 0
             ? $one_address['ip_address'] . ' - Затримка: ' . $latency . ' ms (' . date('Y-m-d H:i:s') . ')'
             : $one_address['ip_address'] . ' - Не відповідає (' . date('Y-m-d H:i:s') . ')';
 
-        // Зберігання даних (замінити на prepared statement)
+               // Зберігання даних (замінити на prepared statement)
         if ($latency >=1) {
             $latency = 1;
-            $status = 'Онлайн';
+            $status = 'В мережі';
         }else{
             $latency = 0;
             $status = 'Офлайн';
         }
+        // Виведення повідомлення
+        echo $message . " -- $status\n";
+
         $pings = Ping::where('address_id', $one_address['id']);
         $now_time = time();
         if ($pings->count() > 0) {
             $last_ping = $pings->latest('last_activity')->first();
-            file_put_contents('cron.log', "\n".$one_address['name']."\n\r".$message."\n\r".$last_ping->last_activity."\n\r".$last_ping->ping."\n\r". $latency."\n", FILE_APPEND);
-            if ($last_ping->ping != $latency) {
+            file_put_contents('cron.log', "\n".$one_address['name']." - ".$message."\n", FILE_APPEND);
+            if ($last_ping->ping !== $latency) {
                 // Створити новий запис Ping
                 Ping::create([
                     'address_id' => $one_address['id'],
@@ -84,7 +88,7 @@ Schedule::call(function () {
                 'last_activity' => $now_time,
                 'last_status' => $now_time,
             ]);
-            $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], 'Онлайн');
+            $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], 'В мережі');
         }
 
 
@@ -100,7 +104,7 @@ Schedule::call(function () {
         if ($url_pings->count() > 0) {
             $last_ping = $url_pings->latest('last_status')->first();
             $now_date= (int)strtotime("-7 minutes");
-            $status_date=(int)$last_ping->last_activity;
+            $status_date=(int)$last_ping->last_status;
             if($now_date>$status_date){
 
                 if ($last_ping->ping == 1) {
@@ -123,7 +127,5 @@ Schedule::call(function () {
 
 
 
-})->everyThreeMinutes();
 
-/*})->everyMinute();*/
 

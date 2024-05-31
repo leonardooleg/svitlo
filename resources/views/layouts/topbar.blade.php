@@ -7,7 +7,7 @@
                     <!-- LOGO -->
                     <div class="navbar-brand-box horizontal-logo">
                         @auth()
-                            <a href="/dashboard" class="logo logo-dark">
+                            <a href="/dashboard/{{ auth()->user()->user_url }}" class="logo logo-dark">
                         @elseguest()
                              <a href="/" class="logo logo-dark">
                         @endauth
@@ -20,7 +20,7 @@
                             </span>
                         </a>
                         @auth()
-                            <a href="/dashboard" class="logo logo-light">
+                            <a href="/dashboard/{{ auth()->user()->user_url }}" class="logo logo-light">
                         @elseguest()
                             <a href="/" class="logo logo-light">
                         @endauth
@@ -50,7 +50,7 @@
                     <!-- LOGO -->
                     <div class="navbar-brand-box vertical-logo">
                         @auth()
-                            <a href="/dashboard" class="logo logo-dark">
+                            <a href="/dashboard/{{ auth()->user()->user_url }}" class="logo logo-dark">
                         @elseguest()
                             <a href="/" class="logo logo-dark">
                         @endauth
@@ -62,7 +62,7 @@
                             </span>
                         </a>
                         @auth()
-                            <a href="/dashboard" class="logo logo-light">
+                            <a href="/dashboard/{{ auth()->user()->user_url }}" class="logo logo-light">
                         @elseauth()
                             <a href="/" class="logo logo-light">
                         @endauth
@@ -77,12 +77,13 @@
                     <div id="scrollbar">
                         <ul class="navbar-nav" id="navbar-nav">
                             <li class="menu-title"><span data-key="t-menu">Меню</span></li>
+                            @guest
                             <li class="nav-item">
                                 <a href="/" class="nav-link menu-link">
-                                    <i class="ph-gauge"></i> <span>Панель</span>
+                                    <i class="ph-gauge"></i> <span>Демо панель</span>
                                 </a>
                             </li>
-
+                            @endguest
 
 
                                 <?php

@@ -15,7 +15,7 @@ class NotificationHelper
         $user_notifications_telegram = $user->telegram_id;
         $user_notifications_email = $user->email;
 
-        $message = "Дім '".$name."' - ". $status;
+        $message = "Об'єкт '".$name."' - ". $status;
 
         if ($user_notifications == 'telegram') {
 

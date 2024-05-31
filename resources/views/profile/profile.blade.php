@@ -38,19 +38,20 @@
                         </div>
                     </div>
                     <div class="col-sm-auto mb-3">
-                        <div class="hstack gap-2">
+                        <div class="hstack gap-2 mt-5">
                             <button class="btn btn-subtle-success">Онлайн</button>
                             <button type="button" class="btn btn-outline-secondary custom-toggle public_user @if(Auth::user()->public_address == 1) active @endif"  data-bs-toggle="button" @if(Auth::user()->public_address == 1) aria-pressed="true" @else aria-pressed="false" @endif>
                                 <span class="icon-off">
-                                    <i class="ri-team-line align-bottom me-1">@if(Auth::user()->public_address === 1)<::before></::before>@endif</i> Публічний</span>
+                                    <i class="ri-team-line align-bottom me-1">@if(Auth::user()->public_address === 1)<::before></::before>@endif</i>Єдине публічне посилання</span>
                                 <span class="icon-on">
-                                    <i class="ri-user-unfollow-line align-bottom me-1">@if(Auth::user()->public_address === 0)<::before></::before>@endif</i>Приватний</span>
+                                    <i class="ri-user-unfollow-line align-bottom me-1">@if(Auth::user()->public_address === 0)<::before></::before>@endif</i>Акаунт закритий</span>
                             </button>
+
                         </div>
+                        <p><br><icon class="ri-lock-line align-bottom me-1"></icon>Мати загальний доступ до своїх адрес без залогінювання <br>(тільки перегляд, для редагування потрібно залогінитися)</p>
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>
@@ -107,7 +108,7 @@
                                             <th class="sort cursor-pointer" data-sort="name">Будинок</th>
                                             <th class="sort cursor-pointer" data-sort="company_name">Статус</th>
                                             <th class="sort cursor-pointer" data-sort="membership">Останні зміни статусу</th>
-                                            <th class="sort cursor-pointer" data-sort="membership">Доступ</th>
+                                            <th class="sort cursor-pointer" data-sort="membership">Доступ до адреси</th>
                                             <th>Дія</th>
                                         </tr>
                                         </thead>
@@ -407,7 +408,7 @@
                             </div>
                             <div class="col-lg-12">
                                 <div>
-                                    <label for="membership-field2" class="form-label">Доступ</label>
+                                    <label for="membership-field2" class="form-label">Доступ до адреси</label>
                                     <select class="form-control" name="membership-field2" id="membership-field2" required >
                                     <option type="number" value="0">Приватна</option>
                                     <option type="number" value="1">Публічна</option>
@@ -488,9 +489,8 @@
                             </div>
                             <div class="col-lg-12">
                                 <div>
-                                    <label for="membership-field" class="form-label">Доступ</label>
-                                    <select class="form-control" name="membership-field" id="membership-field"
-                                            required />
+                                    <label for="membership-field" class="form-label">Доступ до адреси</label>
+                                    <select class="form-control" name="membership-field" id="membership-field"  required />
                                     <option type="number" value="1">Публічна</option>
                                     <option type="number" value="0">Приватна</option>
 

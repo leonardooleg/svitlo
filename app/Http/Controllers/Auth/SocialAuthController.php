@@ -50,6 +50,7 @@ class SocialAuthController extends Controller
                         'provider_token' => $SocialUser->token,
                         'email_verified_at' => now(),
                         'password' => Hash::make('svitlo'. $SocialUser->getId()),
+                        'user_url' => urldecode(md5($SocialUser->email )),
                     ]);
                 }
 

@@ -34,6 +34,7 @@ class User extends Authenticatable
         'notification',
         'telegram_id',
         'public_address',
+        'user_url',
     ];
 
     /**

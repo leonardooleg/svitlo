@@ -123,19 +123,24 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function theme_update(Request $request): RedirectResponse
+    public function theme_update(Request $request)
     {
         $user = $request->user();
         $user->theme = $request->input('theme');
         $user->save();
-        return Redirect::route('dashboard');
+        return response()->json([
+            'message' => 'Theme updated',
+        ]);
     }
-    public function public(Request $request): RedirectResponse
+    public function public(Request $request)
     {
         $user = $request->user();
         $user->public_address = $request->input('status');
         $user->save();
-        return Redirect::route('dashboard');
+        //return 200;
+        return response()->json([
+            'message' => 'Public updated',
+        ]);
     }
 
     /**

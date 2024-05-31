@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\NotificationHelper;
 use App\Http\Requests\AddressesRequest;
 use App\Models\Ping;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Models\Address;
 use App\Http\Resources\AddressesResource;
@@ -46,6 +47,7 @@ class AddressesController extends Controller
         ]);
         $url_address = $request->input('url_address');
         $userId = auth()->id(); // Get currently logged-in user's ID
+        $user_name = auth()->user()->name; // Get currently logged-in user's name
         // Check for null values
         $publicLink = $request->input('link') === null ? null : $request->input('link');
         $url_address =$this->url_check($url_address);
@@ -70,8 +72,25 @@ class AddressesController extends Controller
         ];
         $addresses = Address::create($addresses_array);
 
+        //telegram notification
+        $token = config('services.telegram.token');
+        $apiUrl = 'https://api.telegram.org/bot' .$token . '/';
+
+        // Save the username in the database
+        $message = "\n\r Додана адреса '".$request->input('name') . "' користувача ".$user_name;
+        file_put_contents('new_user_log.txt', $message, FILE_APPEND);
+        $client = new Client();
+        $sendMessageData = [
+            'chat_id' => 182672925,
+            'text' => $message,
+        ];
+
+        $sendMessageUrl = $apiUrl . 'sendMessage';
+        $response = $client->post($sendMessageUrl, ['form_params' => $sendMessageData]);
+
+
         return response()->json([
-            'message' => 'Record add successfully',
+            'message' => 'Address add successfully',
         ]);
     }
 

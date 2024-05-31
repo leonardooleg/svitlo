@@ -27,13 +27,12 @@ class NotificationNewUser
 
         $user = $event->user;
         $userName = $user->name;
-        $this->telegram_notification($userName);
         // Send a message to telegram
         $token = config('services.telegram.token');
         $apiUrl = 'https://api.telegram.org/bot' .$token . '/';
 
         // Save the username in the database
-        $message = "Новий користувач '".$userName;
+        $message = "\n\r Новий користувач '".$userName;
         file_put_contents('new_user_log.txt', $message, FILE_APPEND);
         $client = new Client();
         $sendMessageData = [

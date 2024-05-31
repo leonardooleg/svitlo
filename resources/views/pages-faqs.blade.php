@@ -222,6 +222,25 @@ if (is_string($response)) {
                             </div>
                         </div>
                     </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="publicaccount-headingTwo">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#publicaccount-collapseTwo" aria-expanded="true"
+                                    aria-controls="publicaccount-collapseTwo">
+                                Публічні посилання
+                            </button>
+                        </h2>
+                        <div id="publicaccount-collapseTwo" class="accordion-collapse collapse "
+                             aria-labelledby="publicaccount-headingTwo" data-bs-parent="#manageaccount-accordion">
+                            <div class="accordion-body">
+                                 В <a href="/profile">Особистому кабінеті</a> Ви можете натиснути кнопку "Публічний" чи "Приватний" для доступу до Всіх своїх адрес без залогінювання.
+                                <br><img src="/build/images/public-svitlo.jpg" style="max-width: 400px;  margin: 0 auto; display: block;">
+                                <br> При додаванні чи редагуванні нової адреси ви можете вибрати "доступ" чи "приватний" чи "публічний", після чого отримаєте посилання для  доступу до саме цієї адреси без залогінювання.
+                                <br><img src="/build/images/public_house_svitlo.jpg" style="max-width: 400px;  margin: 0 auto; display: block;">
+                                <br> Ці посилання дають лише доступ для перегляду чи всіх ваших адрес чи однієї. Всі приватні дані доступні тільки в особистому кабінеті після авторизації і тільки тому хто їх додавав.
+                            </div>
+                        </div>
+                    </div>
 
 
                 </div>
@@ -255,8 +274,8 @@ if (is_string($response)) {
                         <div id="privacy-collapseOne" class="accordion-collapse collapse show"
                             aria-labelledby="privacy-headingOne" data-bs-parent="#privacy-accordion">
                             <div class="accordion-body">
-                               <strong>Ні</strong>. Доступ до даних має тільки та особо яка їх додавала. Більше ми нікому їх не надаємо.
-                                Та іформації, що від вас надходить це тільки ваш IP якщо ви його вказали, якщо ви відправляєте запит на посилання API
+                               <strong>Ні</strong>. Доступ до даних має тільки та особа яка їх додавала. Більше ми нікому їх не надаємо.
+                                Та інформації, що від вас надходить це тільки ваш IP якщо ви його вказали, якщо ви відправляєте запит на посилання API
                                 ми тільки зберігаємо час отримання такого запиту.
                             </div>
                         </div>
