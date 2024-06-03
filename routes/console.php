@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Schedule;
 use App\Helpers\NotificationHelper;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
-
 
 
 
@@ -61,15 +57,14 @@ Artisan::command('inspire', function () {
             $latency = 0;
             $status = 'Офлайн';
         }
-        // Виведення повідомлення
-        echo $message . " -- $status\n";
+
 
         $pings = Ping::where('address_id', $one_address['id']);
         $now_time = time();
         if ($pings->count() > 0) {
             $last_ping = $pings->latest('last_activity')->first();
-            file_put_contents('cron.log', "\n".$one_address['name']." - ".$message."\n", FILE_APPEND);
             if ($last_ping->ping !== $latency) {
+                file_put_contents('cron.log', "\n".$one_address['name']." - ".$message."\n", FILE_APPEND);
                 // Створити новий запис Ping
                 Ping::create([
                     'address_id' => $one_address['id'],
@@ -91,9 +86,14 @@ Artisan::command('inspire', function () {
             $notificationHelper->push_notification($one_address['user_id'], $one_address['name'], 'В мережі');
         }
 
-
+        // Виведення повідомлення
+        echo $message . " -- $status\n";
     }
 
+
+
+    //для url запитів
+    $last_ping = false;
     $url_addresses = \App\Models\Address::whereNotNull('url_address')->get();
     foreach ($url_addresses as $url_address) {
 
@@ -114,7 +114,7 @@ Artisan::command('inspire', function () {
                         'last_activity' => $now_time,
                         'last_status' => $now_time,
                     ]);
-                    print 'Дім '.$url_address['name'].'  - Застарів.';
+                    print  $url_address['name'].'  - Застарів.';
                     $notificationHelper->push_notification($url_address['user_id'], $url_address['name'], 'Офлайн');
                 }
 
@@ -122,10 +122,6 @@ Artisan::command('inspire', function () {
 
         }
     }
-
-
-
-
 
 
 

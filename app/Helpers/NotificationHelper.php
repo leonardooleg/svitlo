@@ -15,7 +15,7 @@ class NotificationHelper
         $user_notifications_telegram = $user->telegram_id;
         $user_notifications_email = $user->email;
 
-        $message = "Об'єкт '".$name."' - ". $status;
+        $message = "'".$name."' - ". $status;
 
         if ($user_notifications == 'telegram') {
 
@@ -39,7 +39,7 @@ class NotificationHelper
             $to_email = $user_notifications_email;
             $data = [
                 'name' => $to_name,
-                'body' => "Дім '" . $name. "' - ". $status,
+                'body' => "'" . $name. "' - ". $status,
 
             ];
 

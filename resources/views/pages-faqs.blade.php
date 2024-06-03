@@ -31,7 +31,22 @@
                             <div class="accordion-body">
                                 Після реєстрації Ви в  <a href="/profile">Особистому кабінеті</a> в розділі "Мої будинки" зможете додати свої інтернет адреси для відстеження.
                                 Далі сайт буде моніторити їх кожні 3 хвилини і збирати статистику про їх статус. Якщо статус змінився Ви можете підписатись на оновлення через
-                                Telegram бота чи сповіщення на вашу email адресу.
+                                Telegram бота чи сповіщення на вашу email адресу.<br>
+                                Є два способи відстеження: <br>
+                                1) Якщо у вас постійна IP адреса (можна уточнити у вашого провайдера). <br>
+                                2) Або відправляти з вашого девайсу запити на наш сайт. (самий оптимальний варіант в цьому випадку плата ESP8266 різних варіацій від 0.5$ до 5$).
+                                {{--скрити текст--}}
+                                <p class="d-inline-flex gap-1">
+                                    <a  data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        Приклад плати: NodeMcu V3 CH340
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body">
+                                        <img src="/build/images/esp.jpg" style="max-width: 100%;">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -163,7 +178,7 @@ if (is_string($response)) {
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#genques-collapseFour2" aria-expanded="false"
                                 aria-controls="genques-collapseFour2">
-                            Як відправляти самому запити для моніторингу на платі Arduino?
+                            Як відправляти самому запити для моніторингу на платі ESP/Arduino?
                         </button>
                     </h2>
                     <div id="genques-collapseFour2" class="accordion-collapse collapse"
