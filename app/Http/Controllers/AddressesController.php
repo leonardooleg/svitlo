@@ -115,7 +115,7 @@ class AddressesController extends Controller
                 'message' => 'Address not found',
             ], 404);
         }
-        $pings = Ping::where('address_id', $id_address->id)->latest('last_activity')->get();
+        $pings = Ping::where('address_id', $id_address->id)->latest('last_status')->get();
         $now_time = time();
         $status= false;
         if ($pings->count() > 0) {

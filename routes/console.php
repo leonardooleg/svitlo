@@ -18,39 +18,53 @@ use App\Helpers\NotificationHelper;
     $notificationHelper = new NotificationHelper();
 
     $ip_address = \App\Models\Address::whereNotNull('ip_address')->get();
+
     foreach ($ip_address as $one_address) {
 
         //get ping
         $maxAttempts = 3;  // Максимальна кількість спроб ping
-        $timeout = 90;      // Таймаут очікування (мс)
+        $timeout = 10;      // Таймаут очікування (мс)
 
 
-        $latency = 0;
+
         $host = $one_address['ip_address'];
         $ttl = 128;
-
-
-        // Створити об'єкт ping один раз
-        $ping = new \JJG\Ping($host, $ttl, $timeout);
-
-        for ($attempt = 1; $attempt <= $maxAttempts && !$latency; $attempt++) {
+        for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
             try {
-                $latency = $ping->ping();  // Вказати таймаут при виклику ping
+                $latency = 0;
+                if (PHP_OS_FAMILY === 'Windows') {
+                    // Команда ping для Windows
+                    $command = sprintf('ping -n 1 -i %d -w %d %s', $ttl, $timeout * 1000, escapeshellarg($host));
+                } else {
+                    // Команда ping для Unix-подібних систем
+                    $command = sprintf('ping -c 1 -t %d -W %d %s', $ttl, $timeout, escapeshellarg($host));
+                }
+
+                // Виконуємо команду
+                exec($command, $output, $resultCode);
+
+                // Перевіряємо результат виконання
+                if ($resultCode === 0) {
+                    $latency = 1;
+                } else {
+                    $latency = 0;
+                }
+
             } catch (\Exception $e) {
-                echo 'Помилка ping (' . $attempt . ' спроба): ' . $e->getMessage() . " <br> \n";
+                echo 'Помилка ping (' . $attempt . ' спроба): ' . $e->getMessage() . "\n";
             }
 
             if (!$latency && $attempt < $maxAttempts) {
-                sleep(1); // Затримка в секундах
+                sleep(15); // Затримка в секундах
             }
         }
 
         $message = $latency != 0
-            ? $one_address['ip_address'] . ' - Затримка: ' . $latency . ' ms (' . date('Y-m-d H:i:s') . ')'
-            : $one_address['ip_address'] . ' - Не відповідає (' . date('Y-m-d H:i:s') . ')';
+            ? date('Y-m-d H:i:s') . ' - ' . $one_address['name']." - ".$host . ' - Онлайн'
+            : date('Y-m-d H:i:s') . ' - ' . $one_address['name']." - ".$host . ' - Не відповідає';
 
                // Зберігання даних (замінити на prepared statement)
-        if ($latency >=1) {
+        if ($latency == 1) {
             $latency = 1;
             $status = 'В мережі';
         }else{
@@ -64,7 +78,7 @@ use App\Helpers\NotificationHelper;
         if ($pings->count() > 0) {
             $last_ping = $pings->latest('last_activity')->first();
             if ($last_ping->ping !== $latency) {
-                file_put_contents('cron.log', "\n".$one_address['name']." - ".$message."\n", FILE_APPEND);
+                file_put_contents('cron.log', "\n".$message."\n", FILE_APPEND);
                 // Створити новий запис Ping
                 Ping::create([
                     'address_id' => $one_address['id'],
@@ -87,7 +101,7 @@ use App\Helpers\NotificationHelper;
         }
 
         // Виведення повідомлення
-        echo $message . " -- $status\n";
+        echo $message . "\n";
     }
 
 
