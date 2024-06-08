@@ -239,75 +239,7 @@ function loadCharts() {
         totalOrdersChart.render();
     }
 
-    // Real time sales Chart
-    var realTimeSalesColors = "";
-    realTimeSalesColors = getChartColorsArray("real_time_sales");
-    if (realTimeSalesColors) {
-        var options = {
-            chart: {
-                height: 300,
-                type: 'bar',
-                stacked: true,
-                toolbar: {
-                    show: false,
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '45%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 1,
-                colors: ['transparent']
-            },
-            legend: {
-                show: false,
-            },
-            series: [{
-                name: 'Search Engine Traffic',
-                data: [74, 83, 89, 97, 97, 97, 74]
-            }, {
-                name: 'Direct Traffic',
-                data: [46, 57, 59, 54, 97, 97, 84]
-            }],
-            colors: realTimeSalesColors,
-            xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-            },
-            yaxis: {
-                show: true,
-            },
-            grid: {
-                show: true,
-                padding: {
-                    right: 0,
-                },
-                borderColor: '#000',
-                xaxis: {
-                    lines: {
-                        show: true
-                    }
-                },
-                yaxis: {
-                    lines: {
-                        show: false
-                    }
-                },
-            },
-        }
 
-        if (realTimeSalesChart != "")
-            realTimeSalesChart.destroy();
-        realTimeSalesChart = new ApexCharts(document.querySelector("#real_time_sales"), options);
-        realTimeSalesChart.render();
-    }
 
     //  sales_Report Charts
     var salesReportColors = '';
@@ -316,7 +248,7 @@ function loadCharts() {
         var options = {
             series: [{
                 name: 'This Month',
-                data: [45, 74, 36, 69, 84, 110, 92]
+                data: [115, 74, 36, 69, 84, 110, 92]
             }, {
                 name: 'Last Month',
                 data: [11, 18, 20, 32, 46, 65, 73]

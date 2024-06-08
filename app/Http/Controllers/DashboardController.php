@@ -32,6 +32,83 @@ class DashboardController extends Controller
         }
         return redirect('/',301);
     }
+
+    public function dashboard_all($id_data_address = false, $data_select = null)
+    {
+        $all_addresses = Address::all();
+        foreach ($all_addresses as $address){
+            $all_stats[] = $this->show_other(false, $address['id'], $data_select, true);
+
+        }
+
+        // Приймає масив даних як параметр
+        function countZeroAndOnePings($data) {
+            // Ініціалізувати змінні для підрахунку
+            $zeroMinutes = 0;
+            $oneMinutes = 0;
+
+            // Перебрати масив даних
+            foreach ($data as $user) {
+                foreach ($user['lists'] as $timeRange => $listEntry) {
+                    $count = $listEntry[0];
+                    $duration = $listEntry[1];
+
+                    // Додати час до відповідного лічильника
+                    if ($count === 0) {
+                        $zeroMinutes += parseDurationToMinutes($duration);
+                    } else {
+                        $oneMinutes += parseDurationToMinutes($duration);
+                    }
+                }
+                // Форматування часу в годинах і хвилинах
+                $zeroHours = floor($zeroMinutes / 60);
+                $zeroMinutes = $zeroMinutes % 60;
+                $zeroFormattedTime = sprintf("%d.%02d", $zeroHours, $zeroMinutes);
+
+                $oneHours = floor($oneMinutes / 60);
+                $oneMinutes = $oneMinutes % 60;
+                $oneFormattedTime = sprintf("%d.%02d", $oneHours, $oneMinutes);
+
+                // Зберігати результати
+                $all_times[$user["name"]] = [
+                    "offline" => $zeroFormattedTime,
+                    "online" => $oneFormattedTime
+                ];
+
+                // Скинути лічильники
+                $zeroMinutes = 0;
+                $oneMinutes = 0;
+            }
+
+            // Повернути результати
+            return $all_times;
+        }
+
+// Конвертує тривалість в годинах і хвилинах до хвилин
+        function parseDurationToMinutes($duration) {
+            $parts = explode(' годин(-и) ', $duration);
+            if (count($parts) >= 2) {
+                $hours = (int) $parts[0];
+                $minutes = (int) trim($parts[1]);
+            }else{
+                $hours = 0;
+                $minutes = (int) trim($parts[0]);
+            }
+
+            return $hours * 60 + $minutes;
+        }
+
+// Приклад використання
+
+
+            $all_times =countZeroAndOnePings($all_stats);
+
+
+
+        return view('dashboard_all', ['all_stats'=> $all_stats,'all_times'=> $all_times]);
+
+    }
+
     public function dashboard()
     {
         //ad first user id address
@@ -93,7 +170,7 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $user_url, int $address_id, string $date_select = null, bool $link = false, bool $demo = false)
+    public function show_other(string $user_url, int $address_id, string $date_select = null, bool $link = false, bool $demo = false)
     {
         $addresses=[];
         if ($link) {
@@ -369,10 +446,19 @@ class DashboardController extends Controller
         //Всі відключення
         $pingController = new PingController();
         $pingStats = $pingController->pingStats();
-        return view('dashboard', [ 'name' => $address['name'], 'user_url' => $user_url, 'address_id' => $address_id, 'pings' => $pings, 'lists' => $lists, 'date_select' => $date_select, 'pingCountZero' => $pingCountZero, 'allPingCountZero' => $allPingCountZero, 'groupedCities' => $groupedCities, 'pingStats' => $pingStats, 'addresses' => $addresses]);
+        $data = [ 'name' => $address['name'], 'user_url' => $user_url, 'address_id' => $address_id, 'pings' => $pings, 'lists' => $lists, 'date_select' => $date_select, 'pingCountZero' => $pingCountZero, 'allPingCountZero' => $allPingCountZero, 'groupedCities' => $groupedCities, 'pingStats' => $pingStats, 'addresses' => $addresses];
+        return $data;
+
 
     }
 
+    public function show(string $user_url, int $address_id, string $date_select = null, bool $link = false, bool $demo = false)
+    {
+
+        $data=$this->show_other($user_url, $address_id, $date_select, $link, $demo);
+        return view('dashboard', $data);
+
+    }
 
     /**
      * Show the form for editing the specified resource.

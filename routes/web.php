@@ -25,6 +25,7 @@ Route::get('/dim/{link_address}/{date_select?}', [DashboardController::class, 'l
 Route::get('/dashboard/{user_url}/{address_id}/{date_select?}', [DashboardController::class, 'show'])->name('dashboard_id');
 Route::get('/dashboard/{user_url}', [DashboardController::class, 'index'])->name('user_dashboard');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/all/{address_id?}/{date_select?}', [DashboardController::class, 'dashboard_all'])->name('dashboard_all');
 
 Route::middleware('auth')->group(function () {
 

@@ -46,7 +46,7 @@ var onlineStoreChart = "";
 var chartBarChart = "";
 
 function loadCharts() {
-    
+
     // Average daily sales chart
     var averageDailySalesColors = "";
     averageDailySalesColors = getChartColorsArray("average_daily_sales");
@@ -240,75 +240,7 @@ function loadCharts() {
         totalOrdersChart.render();
     }
 
-    // Real time sales Chart
-    var realTimeSalesColors = "";
-    realTimeSalesColors = getChartColorsArray("real_time_sales");
-    if (realTimeSalesColors) {
-        var options = {
-            chart: {
-                height: 275,
-                type: 'bar',
-                stacked: true,
-                toolbar: {
-                    show: false,
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '45%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 1,
-                colors: ['transparent']
-            },
-            legend: {
-                show: false,
-            },
-            series: [{
-                name: 'Search Engine Traffic',
-                data: [74, 83, 89, 97, 97, 97, 74]
-            }, {
-                name: 'Direct Traffic',
-                data: [46, 57, 59, 54, 97, 97, 84]
-            }],
-            colors: realTimeSalesColors,
-            xaxis: {
-                categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-            },
-            yaxis: {
-                show: true,
-            },
-            grid: {
-                show: true,
-                padding: {
-                    right: 0,
-                },
-                borderColor: '#000',
-                xaxis: {
-                    lines: {
-                        show: true
-                    }
-                },
-                yaxis: {
-                    lines: {
-                        show: false
-                    }
-                },
-            },
-        }
 
-        if (realTimeSalesChart != "")
-            realTimeSalesChart.destroy();
-        realTimeSalesChart = new ApexCharts(document.querySelector("#real_time_sales"), options);
-        realTimeSalesChart.render();
-    }
 
     // world map with line & markers
     var vectorMapWorldLineColors = getChartColorsArray("world-map-line-markers");
@@ -751,7 +683,7 @@ function loadCharts() {
     if (salesTrafficSourceColors) {
         var options = {
             series: [59, 40, 44, 31],
-            labels: ["Facebook", "Instagram", "YouTube", "Google Ads"],
+            labels: ["Face2book", "Instagram", "YouTube", "Google Ads"],
             chart: {
                 height: 267,
                 type: 'donut',
@@ -773,45 +705,6 @@ function loadCharts() {
         salesTrafficSourceChart.render();
     }
 
-    //  online_store Charts
-    var onlineStoreColors = "";
-    onlineStoreColors = getChartColorsArray("online_store");
-    if (onlineStoreColors) {
-        var options = {
-            series: [{
-                name: "Desktops",
-                data: [10, 41, 35, 51, 49, 62]
-            }],
-            chart: {
-                height: 290,
-                type: 'line',
-                zoom: {
-                    enabled: false
-                },
-                toolbar: {
-                    show: false
-                }
-            },
-            markers: {
-                size: 4,
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            colors: onlineStoreColors,
-            xaxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-            }
-        };
-
-        if (onlineStoreChart != "")
-            onlineStoreChart.destroy();
-        onlineStoreChart = new ApexCharts(document.querySelector("#online_store"), options);
-        onlineStoreChart.render();
-    }
 
     // Basic Bar chart
     var chartBarColors = "";
@@ -904,7 +797,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item) {
                 item.innerHTML = countDownBlock;
             }
-            // If the count down is over, write some text 
+            // If the count down is over, write some text
             if (distance < 0) {
                 clearInterval(countDown);
                 document.getElementById("countDownText").innerHTML = `<div class="card-body text-center">

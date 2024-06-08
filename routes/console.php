@@ -23,7 +23,7 @@ use App\Helpers\NotificationHelper;
 
         //get ping
         $maxAttempts = 3;  // Максимальна кількість спроб ping
-        $timeout = 10;      // Таймаут очікування (мс)
+        $timeout = 15;      // Таймаут очікування (мс)
 
 
 
@@ -101,7 +101,7 @@ use App\Helpers\NotificationHelper;
         }
 
         // Виведення повідомлення
-        echo $message . "\n";
+        //echo $message . "\n";
     }
 
 
