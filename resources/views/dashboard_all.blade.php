@@ -11,7 +11,7 @@
         .line {
             display: flex;
             position: relative;
-            height: 200px;
+            height: 100px;
             /*background-color: #152036;*/
             border: #4b4f5e solid 1px;
             overflow: hidden; /* Щоб текст годин не виходив за межі лінії */
@@ -52,7 +52,7 @@
         }
         @media (max-width: 1190px){
             .line-hr-mobile {
-                font-size: 11px;
+                font-size: 8px;
             }
             .breadcomb-ctn h2 {
                 font-size: 14px;
@@ -74,7 +74,7 @@
                 height: 20px;
                 background-color: #fff;
                 overflow: hidden; /* Щоб текст годин не виходив за межі лінії */
-                margin-left: -20px;
+               /* margin-left: -20px;*/
             }
         }
 
@@ -372,7 +372,7 @@
 
 
 
-                    <div class="row mt-3 g-3">
+                    <div class="row  g-3">
                         <div class="col-md-4 col-sm-6">
                             <div class="d-flex gap-2 align-items-center border-end-sm">
                                 <div class="avatar-sm flex-shrink-0">

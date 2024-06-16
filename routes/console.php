@@ -46,6 +46,8 @@ use App\Helpers\NotificationHelper;
                 // Перевіряємо результат виконання
                 if ($resultCode === 0) {
                     $latency = 1;
+                    // Зупинити цикл, якщо отримано відповідь
+                    break;
                 } else {
                     $latency = 0;
                 }

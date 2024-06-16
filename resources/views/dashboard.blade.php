@@ -52,7 +52,7 @@
         }
         @media (max-width: 1190px){
             .line-hr-mobile {
-                font-size: 11px;
+                font-size: 8px;
             }
             .breadcomb-ctn h2 {
                 font-size: 14px;
@@ -74,7 +74,7 @@
                 height: 20px;
                 background-color: #fff;
                 overflow: hidden; /* Щоб текст годин не виходив за межі лінії */
-                margin-left: -20px;
+                /*margin-left: -20px;*/
             }
         }
 
@@ -406,47 +406,7 @@
             </div>
         </div>
 
-        <div class="col-xl-4 col-lg-4">
-            <div class="card card-height-100">
-                <div class="card-header d-flex">
-                    <h5 class="card-title mb-0 flex-grow-1">Топ міст по відстеженню</h5>
-                    <div class="flex-shrink-0">
-                        <div class="dropdown card-header-dropdown">
-                            <a class="text-reset dropdown-btn" href="#!" data-bs-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                <span class="text-muted fs-lg"><i class="bi bi-three-dots-vertical"></i></span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#!">This Years</a>
-                                <a class="dropdown-item" href="#!">Last Years</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="p-3 text-center bg-light bg-opacity-50 mb-4 rounded">
-                        <h4 class="mb-0"><span class="counter-value" data-target="{{ $pingStats['pingCountCurrent'] + 152 }}">0</span> відключень <span
-                                class="text-muted fw-normal fs-sm"><span class="@if($pingStats['trend'] == 'plus') text-success @elseif($pingStats['trend'] == 'minus') text-danger @endif  fw-medium"><i
-                                        class="bi @if($pingStats['trend'] == 'plus')bi-arrow-up @elseif($pingStats['trend'] == 'minus') bi-arrow-down @endif "></i> {{ $pingStats['percentageDifference'] ?? 0 }}%</span> В попередньому місяці</span></h4>
-                    </div>
-                    <ul class="list-unstyled vstack gap-2 mb-0">
-                        @foreach($groupedCities as $city => $city_data)
-                            <li class="d-flex align-items-center gap-2">
-                                @if($city_data['country'] == 'Україна')
-                                <img src="https://img.themesbrand.com/judia/flags/ua.svg" alt="" height="16"  class="rounded-circle object-fit-cover">
-                                @else
-                                    <img src="https://img.themesbrand.com/judia/flags/eu.svg" alt="" height="16"  class="rounded-circle object-fit-cover">
-                                @endif
-                                    <h6 class="flex-grow-1 mb-0">{{ $city }}</h6>
-                                <p class="text-muted mb-0">{{ $city_data['percentage'] }}%</p>
-                            </li>
-                        @endforeach
 
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!--end col-->
         <div class="col-xl-8 col-lg-8">
             <div class="card card-height-100 product-status-wrap" >
                 <div class="card-header d-flex">
@@ -485,7 +445,48 @@
                 </div>
             </div>
         </div>
+        <!--end col-->
 
+        <div class="col-xl-4 col-lg-4">
+            <div class="card card-height-100">
+                <div class="card-header d-flex">
+                    <h5 class="card-title mb-0 flex-grow-1">Топ міст по відстеженню</h5>
+                    <div class="flex-shrink-0">
+                        <div class="dropdown card-header-dropdown">
+                            <a class="text-reset dropdown-btn" href="#!" data-bs-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <span class="text-muted fs-lg"><i class="bi bi-three-dots-vertical"></i></span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#!">This Years</a>
+                                <a class="dropdown-item" href="#!">Last Years</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="p-3 text-center bg-light bg-opacity-50 mb-4 rounded">
+                        <h4 class="mb-0"><span class="counter-value" data-target="{{ $pingStats['pingCountCurrent'] + 152 }}">0</span> відключень <span
+                                class="text-muted fw-normal fs-sm"><span class="@if($pingStats['trend'] == 'plus') text-success @elseif($pingStats['trend'] == 'minus') text-danger @endif  fw-medium"><i
+                                        class="bi @if($pingStats['trend'] == 'plus')bi-arrow-up @elseif($pingStats['trend'] == 'minus') bi-arrow-down @endif "></i> {{ $pingStats['percentageDifference'] ?? 0 }}%</span> В попередньому місяці</span></h4>
+                    </div>
+                    <ul class="list-unstyled vstack gap-2 mb-0">
+                        @foreach($groupedCities as $city => $city_data)
+                            <li class="d-flex align-items-center gap-2">
+                                @if($city_data['country'] == 'Україна')
+                                    <img src="https://img.themesbrand.com/judia/flags/ua.svg" alt="" height="16"  class="rounded-circle object-fit-cover">
+                                @else
+                                    <img src="https://img.themesbrand.com/judia/flags/eu.svg" alt="" height="16"  class="rounded-circle object-fit-cover">
+                                @endif
+                                <h6 class="flex-grow-1 mb-0">{{ $city }}</h6>
+                                <p class="text-muted mb-0">{{ $city_data['percentage'] }}%</p>
+                            </li>
+                        @endforeach
+
+                    </ul>
+                </div>
+            </div>
+        </div>
         <!--end col-->
     </div>
     <!--end row-->
