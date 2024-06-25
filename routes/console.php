@@ -30,30 +30,25 @@ use App\Helpers\NotificationHelper;
         $host = $one_address['ip_address'];
         $ttl = 128;
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
-            try {
+            $latency = 0;
+            if (PHP_OS_FAMILY === 'Windows') {
+                // Команда ping для Windows
+                $command = sprintf('ping -n 1 -i %d -w %d %s', $ttl, $timeout * 1000, escapeshellarg($host));
+            } else {
+                // Команда ping для Unix-подібних систем
+                $command = sprintf('ping -c 1 -t %d -W %d %s', $ttl, $timeout, escapeshellarg($host));
+            }
+
+            // Виконуємо команду
+            exec($command, $output, $resultCode);
+
+            // Перевіряємо результат виконання
+            if ($resultCode === 0) {
+                $latency = 1;
+                // Зупинити цикл, якщо отримано відповідь
+                break;
+            } else {
                 $latency = 0;
-                if (PHP_OS_FAMILY === 'Windows') {
-                    // Команда ping для Windows
-                    $command = sprintf('ping -n 1 -i %d -w %d %s', $ttl, $timeout * 1000, escapeshellarg($host));
-                } else {
-                    // Команда ping для Unix-подібних систем
-                    $command = sprintf('ping -c 1 -t %d -W %d %s', $ttl, $timeout, escapeshellarg($host));
-                }
-
-                // Виконуємо команду
-                exec($command, $output, $resultCode);
-
-                // Перевіряємо результат виконання
-                if ($resultCode === 0) {
-                    $latency = 1;
-                    // Зупинити цикл, якщо отримано відповідь
-                    break;
-                } else {
-                    $latency = 0;
-                }
-
-            } catch (\Exception $e) {
-                echo 'Помилка ping (' . $attempt . ' спроба): ' . $e->getMessage() . "\n";
             }
 
             if (!$latency && $attempt < $maxAttempts) {
@@ -119,7 +114,7 @@ use App\Helpers\NotificationHelper;
         $now_time = time();
         if ($url_pings->count() > 0) {
             $last_ping = $url_pings->latest('last_status')->first();
-            $now_date= (int)strtotime("-7 minutes");
+            $now_date= (int)strtotime("-6 minutes");
             $status_date=(int)$last_ping->last_status;
             if($now_date>$status_date){
 

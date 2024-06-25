@@ -372,7 +372,7 @@
 
 
 
-                    <div class="row  g-3">
+                    <div class="row  g-3 pt-2">
                         <div class="col-md-4 col-sm-6">
                             <div class="d-flex gap-2 align-items-center border-end-sm">
                                 <div class="avatar-sm flex-shrink-0">

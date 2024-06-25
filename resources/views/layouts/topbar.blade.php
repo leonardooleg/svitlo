@@ -12,10 +12,10 @@
                              <a href="/" class="logo logo-dark">
                         @endauth
                             <span class="logo-sm">
-                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
+                                <img src="/build/images/logo-sm.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="/build/images/svitlo.PNG" alt=""
+                                <img src="/build/images/svitlo.png" alt=""
                                      height="22">
                             </span>
                         </a>
@@ -25,10 +25,10 @@
                             <a href="/" class="logo logo-light">
                         @endauth
                             <span class="logo-sm">
-                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
+                                <img src="/build/images/logo-sm.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="/build/images/svitlo.PNG" alt=""
+                                <img src="/build/images/svitlo.png" alt=""
                                      height="22">
                             </span>
                         </a>
@@ -55,10 +55,10 @@
                             <a href="/" class="logo logo-dark">
                         @endauth
                             <span class="logo-sm">
-                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
+                                <img src="/build/images/logo-sm.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="/build/images/svitlo.PNG" alt="" height="22">
+                                <img src="/build/images/svitlo.png" alt="" height="22">
                             </span>
                         </a>
                         @auth()
@@ -67,10 +67,10 @@
                             <a href="/" class="logo logo-light">
                         @endauth
                             <span class="logo-sm">
-                                <img src="/build/images/logo-sm.PNG" alt="" height="22">
+                                <img src="/build/images/logo-sm.png" alt="" height="22">
                             </span>
                             <span class="logo-lg">
-                                <img src="/build/images/svitlo.PNG" alt="" height="22">
+                                <img src="/build/images/svitlo.png" alt="" height="22">
                             </span>
                         </a>
                     </div>
@@ -116,6 +116,9 @@
 
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/faqs"><i class="ph-info"></i> <span>Довідка</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/grafik/1"><i class="ph-clock"></i> <span>Графік</span></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="/forms"><i class="ph-keyboard-thin"></i> <span>Зворотній зв'язок </span></a>

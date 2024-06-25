@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GrafikController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TelegramController;
 use App\Models\User;
@@ -26,6 +27,9 @@ Route::get('/dashboard/{user_url}/{address_id}/{date_select?}', [DashboardContro
 Route::get('/dashboard/{user_url}', [DashboardController::class, 'index'])->name('user_dashboard');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 Route::get('/all/{address_id?}/{date_select?}', [DashboardController::class, 'dashboard_all'])->name('dashboard_all');
+
+
+Route::get('/grafik/{cherga_id?}', [GrafikController::class, 'cherga'])->name('cherga');
 
 Route::middleware('auth')->group(function () {
 
