@@ -14,7 +14,7 @@
                                     <div class="card-header d-md-flex gap-3 text-center">
                                         <div class="flex-grow-1">
 
-                                                    <h4 class="title main_header_h4">Перейти до графіку за чергою</h4>
+                                                    <h4 class="title main_header_h4">Перейти до графіку за чергою для Полтави</h4>
                                                     <div class="row cherga_block">
                                                         <a href="/grafik/1" class="cherga_el">
                                                             1 черга                        </a>
@@ -118,27 +118,47 @@
 
                                     if (currentHour < 12 || (currentHour === 12 && currentMinute === 0)) {
                                         var clockElements = document.querySelectorAll('.clock2');
+                                        for (var i = 0; i < clockElements.length; i++) {
+                                            clockElements[i].style.opacity = '0.5';
+                                        }
+                                        const deg = 6;
+                                        const hr1 = document.querySelector('#hr1');
+                                        const mn1 = document.querySelector('#mn1');
+
+                                        setInterval(() => {
+                                            let day = new Date();
+                                            let hh = day.getHours() * 30;
+                                            let mm = day.getMinutes() * deg;
+
+                                            hr1.style.transform = `rotateZ(${(hh) + (mm/12)}deg)`;
+                                            mn1.style.transform = `rotateZ(${mm}deg)`;
+                                        }, 1000);
+
                                     } else {
                                         var clockElements = document.querySelectorAll('.clock1');
+                                        for (var i = 0; i < clockElements.length; i++) {
+                                            clockElements[i].style.opacity = '0.5';
+                                        }
+
+
+                                        const deg = 6;
+                                        const hr2 = document.querySelector('#hr2');
+                                        const mn2 = document.querySelector('#mn2');
+
+                                        setInterval(() => {
+                                            let day = new Date();
+                                            let hh = day.getHours() * 30;
+                                            let mm = day.getMinutes() * deg;
+
+                                            hr2.style.transform = `rotateZ(${(hh) + (mm/12)}deg)`;
+                                            mn2.style.transform = `rotateZ(${mm}deg)`;
+                                        }, 1000);
                                     }
-                                    for (var i = 0; i < clockElements.length; i++) {
-                                        clockElements[i].style.opacity = '0.5';
-                                    }
 
 
 
-                                    const deg = 6;
-                                    const hr1 = document.querySelector('#hr1');
-                                    const mn1 = document.querySelector('#mn1');
 
-                                    setInterval(() => {
-                                        let day = new Date();
-                                        let hh = day.getHours() * 30;
-                                        let mm = day.getMinutes() * deg;
 
-                                        hr1.style.transform = `rotateZ(${(hh) + (mm/12)}deg)`;
-                                        mn1.style.transform = `rotateZ(${mm}deg)`;
-                                    }, 1000);
 
                                 </script>
 
